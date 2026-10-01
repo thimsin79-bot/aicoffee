@@ -1,0 +1,14 @@
+{
+  "name": "ai-coffee-shop",
+  "version": "1.0.0",
+  "description": "Artisanal Specialty Coffee Shop with Live REST API & Database",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "keywords": ["coffee", "shop", "ecommerce", "rest-api"],
+  "author": "Ai Coffee Shop",
+  "license": "MIT"
+}
+
