@@ -1,0 +1,184 @@
+/* Customer Profile Page Styles */
+
+.profile-wrap {
+  max-width: 860px;
+  margin: 20px auto 80px;
+  padding: 0 20px;
+}
+
+.profile-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 5vw, 40px);
+  box-shadow: var(--shadow-md);
+}
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.avatar-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #040914;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.8rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.35);
+}
+
+.profile-details-top {
+  flex: 1;
+  min-width: 220px;
+}
+
+.profile-details-top h2 {
+  font-size: 1.7rem;
+  margin-bottom: 4px;
+}
+
+.profile-details-top .email {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 18px;
+}
+
+.stats-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  text-align: center;
+  min-width: 100px;
+}
+
+.stat-box .num {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.stat-box .label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.edit-section h3 {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  margin-bottom: 18px;
+}
+
+.btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.saved-alert {
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
+  border: 1px solid var(--status-success-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-top: 14px;
+  font-size: 0.9rem;
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .profile-wrap {
+    margin: 16px auto 60px;
+    padding: 0 14px;
+  }
+
+  .profile-card {
+    padding: clamp(16px, 4vw, 28px);
+  }
+
+  .profile-details-top h2 {
+    font-size: 1.4rem;
+  }
+
+  .avatar-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 2.2rem;
+  }
+
+  .stat-box {
+    min-width: 90px;
+    padding: 10px 14px;
+  }
+
+  .stat-box .num {
+    font-size: 1.2rem;
+  }
+
+  .edit-section h3 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-top {
+    flex-direction: column;
+    text-align: center;
+    gap: 18px;
+  }
+
+  .stats-row {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-wrap {
+    margin: 12px auto 50px;
+    padding: 0 12px;
+  }
+
+  .profile-card {
+    padding: 16px 14px;
+  }
+
+  .profile-top {
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+  }
+
+  .profile-details-top h2 {
+    font-size: 1.25rem;
+  }
+
+  .btn-row {
+    flex-direction: column;
+  }
+
+  .btn-row .btn {
+    width: 100%;
+  }
+}
+
