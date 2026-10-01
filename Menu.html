@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu — Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .menu-page-header {
+      text-align: center;
+      padding: clamp(40px, 8vw, 70px) 20px 25px;
+      background: radial-gradient(circle at center, var(--hero-grad-start, #152542) 0%, var(--bg-main) 80%);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .tabs-container {
+      position: sticky;
+      top: var(--nav-height);
+      z-index: 90;
+      background: rgba(8, 14, 26, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 20px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tabs button {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      padding: 10px 24px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .tabs button:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      transform: translateY(-1px);
+    }
+
+    .tabs button.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #040914;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+    }
+
+    .menu-container {
+      max-width: 1000px;
+      margin: 30px auto 80px;
+      padding: 0 20px;
+    }
+
+    .menu-section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .menu-section.show {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .menu-item:hover {
+      border-color: var(--color-primary);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .badge-thumb {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .badge-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-info h3 {
+      font-size: 1.15rem;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .item-info p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .item-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .item-price {
+      color: var(--color-primary);
+      font-weight: 700;
+      font-size: 1.25rem;
+      white-space: nowrap;
+    }
+
+    .item-cta {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--color-primary);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .menu-item:hover .item-cta {
+      background: var(--color-primary);
+      color: #040914;
+    }
+
+    /* Responsive adjustments for mobile & small screens */
+    @media (max-width: 767px) {
+      .tabs-container {
+        padding: 12px 14px;
+      }
+
+      .tabs {
+        gap: 8px;
+        justify-content: flex-start;
+      }
+
+      .tabs button {
+        padding: 9px 18px;
+        font-size: 0.88rem;
+      }
+
+      .menu-container {
+        margin: 20px auto 60px;
+        padding: 0 14px;
+      }
+
+      .menu-item {
+        padding: 16px 14px;
+        gap: 12px;
+      }
+
+      .item-left {
+        gap: 12px;
+      }
+
+      .badge-thumb {
+        width: 46px;
+        height: 46px;
+        font-size: 1.5rem;
+      }
+
+      .item-info h3 {
+        font-size: 1.02rem;
+      }
+
+      .item-info p {
+        font-size: 0.82rem;
+        -webkit-line-clamp: 2;
+      }
+
+      .item-price {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .menu-item {
+        padding: 14px 12px;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .item-left {
+        width: 100%;
+      }
+
+      .item-right {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid var(--border-color);
+        margin-top: 4px;
+      }
+
+      .badge-thumb {
+        width: 42px;
+        height: 42px;
+        font-size: 1.35rem;
+      }
+
+      .item-info h3 {
+        font-size: 0.95rem;
+      }
+
+      .item-info p {
+        font-size: 0.78rem;
+      }
+
+      .item-cta {
+        padding: 5px 12px;
+        font-size: 0.78rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .menu-page-header {
+        padding: clamp(30px, 6vw, 50px) 14px 20px;
+      }
+
+      .tabs-container {
+        position: sticky;
+        top: var(--nav-height);
+        padding: 10px 12px;
+      }
+
+      .tabs button {
+        padding: 8px 16px;
+        font-size: 0.82rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/menu.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link" data-i18n="nav_home">Home</a></li>
+        <li><a href="Menu.html" class="nav-link active" data-i18n="nav_menu">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link" data-i18n="nav_cart">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link" data-i18n="nav_orders">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link" data-i18n="nav_feedback">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link" data-i18n="nav_profile">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link" data-i18n="nav_admin">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link" data-i18n="nav_signin">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div class="menu-page-header">
+    <div class="container">
+      <h1 style="font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 8px;" data-i18n="page_menu_title">Our Menu Catalog</h1>
+      <p style="color:var(--text-muted); max-width:600px; margin:0 auto; font-size:1rem;" data-i18n="page_menu_sub">Handcrafted fresh drinks, slow-brewed specialties, and bakery favorites. Tap any item to customize.</p>
+    </div>
+  </div>
+
+  <!-- Sticky Responsive Category Filter Tabs -->
+  <div class="tabs-container">
+    <div class="tabs">
+      <button class="active" data-tab="hot" data-i18n="cat_hot">☕ Espresso &amp; Hot Coffee</button>
+      <button data-tab="cold" data-i18n="cat_cold">🧊 Cold &amp; Iced Drinks</button>
+      <button data-tab="food" data-i18n="cat_food">🥐 Food &amp; Pastries</button>
+    </div>
+  </div>
+
+  <!-- Main Menu Sections -->
+  <main class="menu-container">
+    <!-- Hot Coffee Section -->
+    <section class="menu-section show" id="hot">
+      <div class="menu-item" data-name="Espresso" data-desc="Rich and bold single shot espresso with dense crema." data-price="2.50" data-icon="&#9749;" data-category="Hot Coffee" data-photo="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop&q=80" alt="Espresso" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Espresso</h3>
+            <p>Rich and bold single shot espresso with dense crema.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$2.50</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Americano" data-desc="Double espresso shot topped with steaming hot water." data-price="3.00" data-icon="&#9749;" data-category="Hot Coffee" data-photo="https://images.unsplash.com/photo-1551030173-122aabc4489c?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1551030173-122aabc4489c?w=600&auto=format&fit=crop&q=80" alt="Americano" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Americano</h3>
+            <p>Double espresso shot topped with steaming hot water.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$3.00</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Cappuccino" data-desc="Espresso balanced with steamed milk and airy microfoam." data-price="3.50" data-icon="&#9749;" data-category="Hot Coffee" data-photo="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&auto=format&fit=crop&q=80" alt="Cappuccino" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Cappuccino</h3>
+            <p>Espresso balanced with steamed milk and airy microfoam.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$3.50</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Latte" data-desc="Smooth, silky milk coffee with delicate espresso notes." data-price="3.80" data-icon="&#9749;" data-category="Hot Coffee" data-photo="https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&auto=format&fit=crop&q=80" alt="Latte" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Latte</h3>
+            <p>Smooth, silky milk coffee with delicate espresso notes.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$3.80</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Mocha" data-desc="Espresso, Dutch chocolate, and steamed velvet milk." data-price="4.20" data-icon="&#9749;" data-category="Hot Coffee" data-photo="https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=600&auto=format&fit=crop&q=80" alt="Mocha" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Mocha</h3>
+            <p>Espresso, Dutch chocolate, and steamed velvet milk.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$4.20</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Caramel Macchiato" data-desc="Vanilla steamed milk marked with espresso and caramel." data-price="4.50" data-icon="&#9749;" data-category="Hot Coffee" data-photo="https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=600&auto=format&fit=crop&q=80" alt="Caramel Macchiato" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Caramel Macchiato</h3>
+            <p>Vanilla steamed milk marked with espresso and caramel.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$4.50</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Matcha Latte" data-desc="Ceremonial Japanese matcha whisked with steamed oat milk." data-price="4.30" data-icon="&#127861;" data-category="Hot Coffee" data-photo="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&auto=format&fit=crop&q=80" alt="Matcha Latte" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Matcha Latte</h3>
+            <p>Ceremonial Japanese matcha whisked with steamed oat milk.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$4.30</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Hot Chocolate" data-desc="Velvety melted dark cocoa topped with marshmallows." data-price="3.60" data-icon="&#127861;" data-category="Hot Coffee" data-photo="https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=600&auto=format&fit=crop&q=80" alt="Hot Chocolate" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Hot Chocolate</h3>
+            <p>Velvety melted dark cocoa topped with marshmallows.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$3.60</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cold Drinks Section -->
+    <section class="menu-section" id="cold">
+      <div class="menu-item" data-name="Cold Brew" data-desc="18-hour slow steeped specialty blend, naturally sweet." data-price="4.00" data-icon="&#127853;" data-category="Cold &amp; Iced Drinks" data-photo="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&auto=format&fit=crop&q=80" alt="Cold Brew" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Cold Brew</h3>
+            <p>18-hour slow steeped specialty blend, naturally sweet.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$4.00</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Iced Latte" data-desc="Chilled espresso poured over ice and cold milk." data-price="4.00" data-icon="&#127865;" data-category="Cold &amp; Iced Drinks" data-photo="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format&fit=crop&q=80" alt="Iced Latte" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Iced Latte</h3>
+            <p>Chilled espresso poured over ice and cold milk.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$4.00</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Iced Caramel Frappe" data-desc="Blended espresso, salted caramel, cream, and crushed ice." data-price="4.80" data-icon="&#127864;" data-category="Cold &amp; Iced Drinks" data-photo="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop&q=80" alt="Iced Caramel Frappe" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Iced Caramel Frappe</h3>
+            <p>Blended espresso, salted caramel, cream, and crushed ice.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$4.80</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Mango Smoothie" data-desc="Sweet sun-ripened mango blended with Greek yogurt." data-price="4.50" data-icon="&#127865;" data-category="Cold &amp; Iced Drinks" data-photo="https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=600&auto=format&fit=crop&q=80" alt="Mango Smoothie" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Mango Smoothie</h3>
+            <p>Sweet sun-ripened mango blended with Greek yogurt.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$4.50</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Lemon Iced Tea" data-desc="Refreshing brewed Ceylon black tea with crisp lemon zest." data-price="3.20" data-icon="&#127866;" data-category="Cold &amp; Iced Drinks" data-photo="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&auto=format&fit=crop&q=80" alt="Lemon Iced Tea" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Lemon Iced Tea</h3>
+            <p>Refreshing brewed Ceylon black tea with crisp lemon zest.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$3.20</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Food & Pastries Section -->
+    <section class="menu-section" id="food">
+      <div class="menu-item" data-name="Butter Croissant" data-desc="Flaky, golden-baked layered French butter pastry." data-price="2.80" data-icon="&#127828;" data-category="Food &amp; Pastries" data-photo="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format&fit=crop&q=80" alt="Butter Croissant" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Butter Croissant</h3>
+            <p>Flaky, golden-baked layered French butter pastry.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$2.80</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Chocolate Muffin" data-desc="Moist artisanal muffin loaded with Belgian chocolate chunks." data-price="2.50" data-icon="&#127836;" data-category="Food &amp; Pastries" data-photo="https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=600&auto=format&fit=crop&q=80" alt="Chocolate Muffin" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Chocolate Muffin</h3>
+            <p>Moist artisanal muffin loaded with Belgian chocolate chunks.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$2.50</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Cheesecake" data-desc="Decadent New York style creamy cheesecake slice." data-price="4.90" data-icon="&#127853;" data-category="Food &amp; Pastries" data-photo="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&auto=format&fit=crop&q=80" alt="Cheesecake" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Cheesecake</h3>
+            <p>Decadent New York style creamy cheesecake slice.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$4.90</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+
+      <div class="menu-item" data-name="Ham &amp; Cheese Sandwich" data-desc="Artisan sourdough, smoked ham, melted sharp cheddar." data-price="5.50" data-icon="&#129368;" data-category="Food &amp; Pastries" data-photo="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80">
+        <div class="item-left">
+          <span class="badge-thumb"><img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80" alt="Ham &amp; Cheese Sandwich" loading="lazy"></span>
+          <div class="item-info">
+            <h3>Ham &amp; Cheese Sandwich</h3>
+            <p>Artisan sourdough, smoked ham, melted sharp cheddar.</p>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-price">$5.50</div>
+          <span class="item-cta">Customize &rarr;</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ai Coffee Shop. Handcrafted with passion. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Tab switching
+    const buttons = document.querySelectorAll('.tabs button');
+    const sections = document.querySelectorAll('.menu-section');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+        sections.forEach(s => s.classList.remove('show'));
+        const targetSection = document.getElementById(button.dataset.tab);
+        if (targetSection) targetSection.classList.add('show');
+      });
+    });
+
+    // Handle dynamic items from admin menu items if stored in localStorage
+    (function renderCustomMenuItems() {
+      const stored = localStorage.getItem('menuItems');
+      if (!stored) return;
+      let items;
+      try { items = JSON.parse(stored); } catch (e) { return; }
+      if (!Array.isArray(items) || items.length === 0) return;
+
+      const container = { hot: 'hot', cold: 'cold', food: 'food' };
+      document.querySelectorAll('.menu-section').forEach(s => s.innerHTML = '');
+
+      items.forEach(item => {
+        const cid = container[item.category];
+        if (!cid) return;
+        const section = document.getElementById(cid);
+        if (!section) return;
+
+        const div = document.createElement('div');
+        div.className = 'menu-item';
+        div.dataset.name = item.name;
+        div.dataset.desc = item.desc || '';
+        div.dataset.price = item.price;
+        div.dataset.icon = item.icon || '&#9749;';
+        div.dataset.category = item.category === 'food' ? 'Food & Pastries' : item.category === 'cold' ? 'Cold & Iced Drinks' : 'Hot Coffee';
+
+        const photoUrl = resolveItemPhoto(item.name, item.photo);
+        div.dataset.photo = photoUrl;
+
+        const thumb = photoUrl
+          ? '<span class="badge-thumb"><img src="' + photoUrl + '" alt="' + item.name + '" loading="lazy"></span>'
+          : '<span class="badge-thumb">' + (item.icon || '&#9749;') + '</span>';
+
+        div.innerHTML = `
+          <div class="item-left">
+            ${thumb}
+            <div class="item-info">
+              <h3>${item.name}</h3>
+              <p>${item.desc || ''}</p>
+            </div>
+          </div>
+          <div class="item-right">
+            <div class="item-price">$${Number(item.price).toFixed(2)}</div>
+            <span class="item-cta">Customize &rarr;</span>
+          </div>
+        `;
+        section.appendChild(div);
+      });
+    })();
+
+    // Helper: Default Menu Item Photos
+    const MENU_DEFAULT_IMAGES = {
+      'espresso': 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop&q=80',
+      'americano': 'https://images.unsplash.com/photo-1551030173-122aabc4489c?w=600&auto=format&fit=crop&q=80',
+      'cappuccino': 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&auto=format&fit=crop&q=80',
+      'latte': 'https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&auto=format&fit=crop&q=80',
+      'mocha': 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=600&auto=format&fit=crop&q=80',
+      'caramel macchiato': 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=600&auto=format&fit=crop&q=80',
+      'matcha latte': 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&auto=format&fit=crop&q=80',
+      'hot chocolate': 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=600&auto=format&fit=crop&q=80',
+      'cold brew': 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&auto=format&fit=crop&q=80',
+      'iced latte': 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format&fit=crop&q=80',
+      'iced caramel frappe': 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop&q=80',
+      'mango smoothie': 'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=600&auto=format&fit=crop&q=80',
+      'lemon iced tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&auto=format&fit=crop&q=80',
+      'butter croissant': 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format&fit=crop&q=80',
+      'chocolate muffin': 'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=600&auto=format&fit=crop&q=80',
+      'cheesecake': 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&auto=format&fit=crop&q=80',
+      'ham & cheese sandwich': 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80'
+    };
+
+    function resolveItemPhoto(name, explicitPhoto) {
+      if (explicitPhoto && explicitPhoto.trim()) return explicitPhoto.trim();
+      const key = (name || '').toLowerCase().trim();
+      if (MENU_DEFAULT_IMAGES[key]) return MENU_DEFAULT_IMAGES[key];
+      for (const [k, url] of Object.entries(MENU_DEFAULT_IMAGES)) {
+        if (key.includes(k) || k.includes(key)) return url;
+      }
+      return '';
+    }
+
+    // Click handler on menu item to go to Product.html with photo
+    document.addEventListener('click', e => {
+      const item = e.target.closest('.menu-item');
+      if (!item) return;
+
+      const name = item.dataset.name || item.querySelector('h3').textContent.trim();
+      const desc = item.dataset.desc || item.querySelector('p').textContent.trim();
+      const price = item.dataset.price || item.querySelector('.item-price').textContent.replace('$', '').trim();
+      const icon = item.dataset.icon || '&#9749;';
+      const category = item.dataset.category || 'Hot Coffee';
+      const photo = item.dataset.photo || (item.querySelector('.badge-thumb img') ? item.querySelector('.badge-thumb img').src : resolveItemPhoto(name));
+
+      location.href = 'Product.html?name=' + encodeURIComponent(name) +
+        '&desc=' + encodeURIComponent(desc) +
+        '&price=' + encodeURIComponent(price) +
+        '&category=' + encodeURIComponent(category) +
+        '&icon=' + encodeURIComponent(icon) +
+        (photo ? '&photo=' + encodeURIComponent(photo) : '');
+    });
+  </script>
+  <script src="js/menu.js"></script>
+</body>
+</html>

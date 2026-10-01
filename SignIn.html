@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-page-container {
+      min-height: calc(100vh - var(--nav-height) - 180px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: clamp(24px, 6vw, 42px);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+
+    .auth-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .auth-box h1 {
+      font-size: 1.85rem;
+      margin-bottom: 6px;
+    }
+
+    .auth-box .auth-sub {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 25px;
+    }
+
+    .auth-options-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      margin: 12px 0 22px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .auth-switch-link {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .error-alert {
+      background: var(--status-danger-bg);
+      color: var(--status-danger-text);
+      border: 1px solid var(--status-danger-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+      display: none;
+      text-align: left;
+    }
+
+    @media (max-width: 767px) {
+      .auth-page-container {
+        padding: 30px 14px;
+      }
+
+      .auth-box {
+        padding: clamp(20px, 5vw, 32px);
+      }
+
+      .auth-box h1 {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .auth-page-container {
+        padding: 24px 12px;
+        min-height: calc(100vh - var(--nav-height) - 140px);
+      }
+
+      .auth-box {
+        padding: 20px 16px;
+      }
+
+      .auth-box h1 {
+        font-size: 1.4rem;
+      }
+
+      .auth-box .auth-sub {
+        font-size: 0.85rem;
+      }
+
+      .auth-options-row {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link">Home</a></li>
+        <li><a href="Menu.html" class="nav-link">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link active">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-page-container">
+    <div class="auth-box">
+      <span class="auth-icon">&#9749;</span>
+      <h1>Welcome <span style="color:var(--color-primary)">Back</span></h1>
+      <p class="auth-sub">Sign in to track orders and save your favorite drinks.</p>
+
+      <div class="error-alert" id="errorMsg">
+        ⚠️ Invalid email or password. Please check your credentials and try again.
+      </div>
+
+      <form id="signinForm">
+        <div class="field" style="text-align: left; margin-bottom: 16px;">
+          <label>Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="you@example.com" required>
+        </div>
+
+        <div class="field" style="text-align: left; margin-bottom: 12px;">
+          <label>Password</label>
+          <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+        </div>
+
+        <div class="auth-options-row">
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox"> Remember me
+          </label>
+          <a href="#" onclick="alert('Password reset link sent to your registered email.')">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" data-i18n="nav_signin">Sign In &rarr;</button>
+      </form>
+
+      <div class="auth-switch-link">
+        New to Ai Coffee Shop? <a href="SignUp.html" style="font-weight:700;">Create an account</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ai Coffee Shop. Handcrafted with passion. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('signinForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const stored = JSON.parse(localStorage.getItem('user') || 'null');
+
+      if (stored && stored.email.toLowerCase() === email.toLowerCase() && stored.password === password) {
+        localStorage.setItem('loggedIn', 'true');
+        alert('Welcome back, ' + stored.name + '!');
+        window.location.href = 'Home.html';
+      } else if (!stored) {
+        // Create demo session for guest testing if no user in localStorage
+        const demoUser = { name: email.split('@')[0], email: email, password: password, phone: '+1 555-0123' };
+        localStorage.setItem('user', JSON.stringify(demoUser));
+        localStorage.setItem('loggedIn', 'true');
+        alert('Signed in as ' + demoUser.name + '!');
+        window.location.href = 'Home.html';
+      } else {
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    });
+  </script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

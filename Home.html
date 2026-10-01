@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ai Coffee Shop — Artisanal Specialty Coffee & Drinks</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link active" data-i18n="nav_home">Home</a></li>
+        <li><a href="Menu.html" class="nav-link" data-i18n="nav_menu">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link" data-i18n="nav_cart">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link" data-i18n="nav_orders">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link" data-i18n="nav_feedback">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link" data-i18n="nav_profile">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link" data-i18n="nav_admin">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link" data-i18n="nav_signin">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="container">
+      <span class="hero-badge" data-i18n="hero_badge">✨ Fresh Roasts Daily &middot; 100% Organic</span>
+      <h1><span data-i18n="hero_title_1">Artisanal Coffee,</span><br><span data-i18n="hero_title_2">Brewed to Perfection</span></h1>
+      <p data-i18n="hero_desc">Experience ethically sourced specialty beans, handcrafted lattes, cold brews, and oven-fresh pastries tailored to your taste.</p>
+      <div class="hero-buttons">
+        <a href="#menu" class="btn btn-primary btn-lg" data-i18n="btn_explore_menu">Explore Menu</a>
+        <a href="Menu.html" class="btn btn-secondary btn-lg" data-i18n="btn_order_online">Order Online &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Strip -->
+  <div class="features-strip">
+    <div class="features-grid">
+      <div class="feature-item">
+        <span class="feature-icon">🌱</span>
+        <div class="feature-text">
+          <h4 data-i18n="feat_ethical_title">Ethical Sourcing</h4>
+          <p data-i18n="feat_ethical_desc">Direct-trade organic beans</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">⚡</span>
+        <div class="feature-text">
+          <h4 data-i18n="feat_delivery_title">Express Delivery</h4>
+          <p data-i18n="feat_delivery_desc">Warm & prompt to door</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">☕</span>
+        <div class="feature-text">
+          <h4 data-i18n="feat_craft_title">Master Baristas</h4>
+          <p data-i18n="feat_craft_desc">Handcrafted coffee art</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🥐</span>
+        <div class="feature-text">
+          <h4 data-i18n="feat_fresh_title">Fresh Bakery</h4>
+          <p data-i18n="feat_fresh_desc">Baked fresh daily</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Menu Section -->
+  <main class="container" id="menu" style="padding-top: 60px; padding-bottom: 60px;">
+    <div class="section-title">
+      <h2>Our Handcrafted Menu</h2>
+      <p>Select any item to customize your drink size, espresso shots, or milk choices.</p>
+    </div>
+
+    <!-- Hot Drinks -->
+    <div class="menu-category-title">
+      <span>Espresso &amp; Hot Coffee</span>
+      <small style="font-size:0.8rem; color:var(--text-dim); text-transform:none;">8 selections</small>
+    </div>
+    <div class="menu-grid">
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop&q=80" alt="Espresso" loading="lazy"></div>
+        <h3>Espresso</h3>
+        <p>Rich and bold single shot espresso with dense crema.</p>
+        <div class="card-footer">
+          <span class="card-price">$2.50</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1551030173-122aabc4489c?w=600&auto=format&fit=crop&q=80" alt="Americano" loading="lazy"></div>
+        <h3>Americano</h3>
+        <p>Double espresso shot topped with steaming hot water.</p>
+        <div class="card-footer">
+          <span class="card-price">$3.00</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&auto=format&fit=crop&q=80" alt="Cappuccino" loading="lazy"></div>
+        <h3>Cappuccino</h3>
+        <p>Espresso balanced with steamed milk and airy microfoam.</p>
+        <div class="card-footer">
+          <span class="card-price">$3.50</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&auto=format&fit=crop&q=80" alt="Latte" loading="lazy"></div>
+        <h3>Latte</h3>
+        <p>Smooth, silky milk coffee with delicate espresso notes.</p>
+        <div class="card-footer">
+          <span class="card-price">$3.80</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=600&auto=format&fit=crop&q=80" alt="Mocha" loading="lazy"></div>
+        <h3>Mocha</h3>
+        <p>Espresso, Dutch chocolate, and steamed velvet milk.</p>
+        <div class="card-footer">
+          <span class="card-price">$4.20</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=600&auto=format&fit=crop&q=80" alt="Caramel Macchiato" loading="lazy"></div>
+        <h3>Caramel Macchiato</h3>
+        <p>Vanilla steamed milk marked with espresso and caramel.</p>
+        <div class="card-footer">
+          <span class="card-price">$4.50</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&auto=format&fit=crop&q=80" alt="Matcha Latte" loading="lazy"></div>
+        <h3>Matcha Latte</h3>
+        <p>Ceremonial Japanese matcha whisked with steamed oat milk.</p>
+        <div class="card-footer">
+          <span class="card-price">$4.30</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=600&auto=format&fit=crop&q=80" alt="Hot Chocolate" loading="lazy"></div>
+        <h3>Hot Chocolate</h3>
+        <p>Velvety melted dark cocoa topped with marshmallows.</p>
+        <div class="card-footer">
+          <span class="card-price">$3.60</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cold Drinks -->
+    <div class="menu-category-title">
+      <span>Cold &amp; Iced Refreshers</span>
+      <small style="font-size:0.8rem; color:var(--text-dim); text-transform:none;">5 selections</small>
+    </div>
+    <div class="menu-grid">
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&auto=format&fit=crop&q=80" alt="Cold Brew" loading="lazy"></div>
+        <h3>Cold Brew</h3>
+        <p>18-hour slow steeped specialty blend, naturally sweet.</p>
+        <div class="card-footer">
+          <span class="card-price">$4.00</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format&fit=crop&q=80" alt="Iced Latte" loading="lazy"></div>
+        <h3>Iced Latte</h3>
+        <p>Chilled espresso poured over ice and your choice of milk.</p>
+        <div class="card-footer">
+          <span class="card-price">$4.00</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop&q=80" alt="Iced Caramel Frappe" loading="lazy"></div>
+        <h3>Iced Caramel Frappe</h3>
+        <p>Blended espresso, salted caramel, cream, and crushed ice.</p>
+        <div class="card-footer">
+          <span class="card-price">$4.80</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=600&auto=format&fit=crop&q=80" alt="Mango Smoothie" loading="lazy"></div>
+        <h3>Mango Smoothie</h3>
+        <p>Sweet sun-ripened mango blended with Greek yogurt.</p>
+        <div class="card-footer">
+          <span class="card-price">$4.50</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&auto=format&fit=crop&q=80" alt="Lemon Iced Tea" loading="lazy"></div>
+        <h3>Lemon Iced Tea</h3>
+        <p>Refreshing brewed Ceylon black tea with crisp lemon zest.</p>
+        <div class="card-footer">
+          <span class="card-price">$3.20</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food & Pastries -->
+    <div class="menu-category-title">
+      <span>Food &amp; Bakery</span>
+      <small style="font-size:0.8rem; color:var(--text-dim); text-transform:none;">4 selections</small>
+    </div>
+    <div class="menu-grid">
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format&fit=crop&q=80" alt="Butter Croissant" loading="lazy"></div>
+        <h3>Butter Croissant</h3>
+        <p>Flaky, golden-baked layered French butter pastry.</p>
+        <div class="card-footer">
+          <span class="card-price">$2.80</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=600&auto=format&fit=crop&q=80" alt="Chocolate Muffin" loading="lazy"></div>
+        <h3>Chocolate Muffin</h3>
+        <p>Moist artisanal muffin loaded with Belgian chocolate chunks.</p>
+        <div class="card-footer">
+          <span class="card-price">$2.50</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&auto=format&fit=crop&q=80" alt="Cheesecake" loading="lazy"></div>
+        <h3>Cheesecake</h3>
+        <p>Decadent New York style creamy cheesecake slice.</p>
+        <div class="card-footer">
+          <span class="card-price">$4.90</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+      <div class="coffee-card">
+        <div class="card-thumb"><img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80" alt="Ham &amp; Cheese Sandwich" loading="lazy"></div>
+        <h3>Ham &amp; Cheese Sandwich</h3>
+        <p>Artisan sourdough, smoked ham, melted sharp cheddar.</p>
+        <div class="card-footer">
+          <span class="card-price">$5.50</span>
+          <span class="card-add-btn">Customize &rarr;</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 35px;">
+      <a href="Menu.html" class="btn btn-primary btn-lg">View Full Interactive Menu &rarr;</a>
+    </div>
+  </main>
+
+  <!-- How It Works Section -->
+  <section class="process-section" id="process">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="process_title">How We Brew</h2>
+        <p data-i18n="process_sub">Simple, transparent, and refined from cherry to cup.</p>
+      </div>
+      <div class="process-grid">
+        <div class="process-card">
+          <div class="process-num">1</div>
+          <h3 data-i18n="step_1_title">1. Select Beans</h3>
+          <p data-i18n="step_1_desc">Carefully chosen organic harvests from premier estates.</p>
+        </div>
+        <div class="process-card">
+          <div class="process-num">2</div>
+          <h3 data-i18n="step_2_title">2. Precision Roast</h3>
+          <p data-i18n="step_2_desc">Custom heat profiles to unlock natural florals and caramel.</p>
+        </div>
+        <div class="process-card">
+          <div class="process-num">3</div>
+          <h3 data-i18n="step_3_title">3. Handcrafted Pour</h3>
+          <p data-i18n="step_3_desc">Expertly brewed by master baristas with filtered minerals.</p>
+        </div>
+        <div class="process-card">
+          <div class="process-num">4</div>
+          <h3 data-i18n="step_4_title">4. Enjoy Every Sip</h3>
+          <p data-i18n="step_4_desc">Served fresh at our café or delivered directly to you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" id="about">
+    <div class="about-grid">
+      <div class="about-card">
+        <span class="badge" data-i18n="about_badge">Our Story</span>
+        <h2 data-i18n="about_title">Passionate About Every Single Bean</h2>
+        <p data-i18n="about_desc">Founded with a mission to bring modern artisanal coffee culture to our community. Every sip tells a tale of mindful roasting, precise water profiling, and genuine dedication to the barista craft.</p>
+        <p>Whether you're starting an early morning work session or enjoying an afternoon unwind, we ensure every roast is consistently exceptional.</p>
+        <div class="about-stats">
+          <div class="about-stat">
+            <h3>100%</h3>
+            <p>Specialty Arabica</p>
+          </div>
+          <div class="about-stat">
+            <h3>15+</h3>
+            <p>Origin Varietals</p>
+          </div>
+          <div class="about-stat">
+            <h3>30m</h3>
+            <p>Avg Delivery Time</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-card" style="background: linear-gradient(145deg, #152542 0%, #0c1524 100%);">
+        <span class="badge">Visit Our Roastery</span>
+        <h2>123 Coffee Street, Cityville</h2>
+        <p>Drop by our flagship café to experience the aroma of our open roastery, ambient work lounge, and friendly community.</p>
+        <ul style="list-style:none; margin: 20px 0; color:var(--text-muted); line-height:2;">
+          <li>☕ <strong>Dine-in &amp; Takeaway:</strong> Open 7 days a week</li>
+          <li>⏰ <strong>Operating Hours:</strong> 7:00 AM — 9:00 PM</li>
+          <li>📞 <strong>Customer Support:</strong> +1 555-0123</li>
+          <li>✉️ <strong>Direct Contact:</strong> hello@aicoffershop.com</li>
+        </ul>
+        <a href="Menu.html" class="btn btn-primary" style="margin-top:10px;">Order for Delivery</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <div class="contact-card">
+        <div class="section-title" style="margin-bottom: 25px;">
+          <h2>Get in Touch</h2>
+          <p>Have a question or custom catering request? Send us a note!</p>
+        </div>
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="field">
+              <label>Your Name</label>
+              <input type="text" class="form-control" placeholder="John Doe" required>
+            </div>
+            <div class="field">
+              <label>Your Email</label>
+              <input type="email" class="form-control" placeholder="john@example.com" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea class="form-control" rows="4" placeholder="How can we help you today?" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Send Message &rarr;</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ai Coffee Shop. Handcrafted with passion. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>

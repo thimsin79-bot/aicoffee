@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customize Drink — Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .product-page-wrap {
+      max-width: 1100px;
+      margin: 30px auto 80px;
+      padding: 0 20px;
+    }
+
+    .back-nav {
+      margin-bottom: 24px;
+    }
+
+    .back-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .back-nav a:hover {
+      color: var(--color-primary);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 45px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: clamp(20px, 4vw, 45px);
+      box-shadow: var(--shadow-md);
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+
+    .product-visual {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 360px;
+      position: relative;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-visual .product-featured-img {
+      width: 100%;
+      height: 100%;
+      min-height: 360px;
+      max-height: 440px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-visual:hover .product-featured-img {
+      transform: scale(1.03);
+    }
+
+    .product-visual .visual-icon {
+      font-size: clamp(5rem, 12vw, 8.5rem);
+      line-height: 1;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
+      padding: 40px 20px;
+    }
+
+    .product-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .category-badge {
+      display: inline-block;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .product-details h1 {
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .product-price-tag {
+      color: var(--color-primary);
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .product-desc {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .custom-group {
+      margin-bottom: 22px;
+    }
+
+    .custom-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+
+    .pill-options {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill-options button {
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-options button:hover {
+      border-color: var(--color-primary);
+      color: var(--text-main);
+    }
+
+    .pill-options button.selected {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #040914;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.35);
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 20px 0 25px;
+    }
+
+    .qty-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .qty-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    .qty-display {
+      font-size: 1.35rem;
+      font-weight: 700;
+      min-width: 36px;
+      text-align: center;
+    }
+
+    .toast-alert {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: var(--color-primary);
+      color: #040914;
+      padding: 14px 24px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast-alert.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Top Action Bar */
+    .product-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .pill-add-btn {
+      background: transparent;
+      border: 1px dashed var(--color-primary);
+      color: var(--color-primary);
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-add-btn:hover {
+      background: rgba(var(--color-primary-rgb), 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Add Product Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 9, 20, 0.82);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 3000;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+      animation: fadeInModal 0.25s ease;
+    }
+
+    @keyframes fadeInModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-dialog {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      max-width: 580px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: slideUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUpModal {
+      from { transform: translateY(20px); opacity: 0.8; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-header h3 {
+      font-size: 1.25rem;
+      color: var(--color-primary);
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--color-primary);
+      transform: scale(1.15);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .device-upload-card {
+      background: var(--bg-card);
+      border: 1px dashed var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 6px;
+      transition: var(--transition);
+    }
+
+    .device-upload-card:hover {
+      border-color: var(--color-primary);
+    }
+
+    .upload-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .photo-preview-wrap {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      background: var(--bg-surface);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .photo-preview-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .photo-preview-wrap img {
+      width: 54px;
+      height: 54px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .remove-photo-btn {
+      background: transparent;
+      border: none;
+      color: var(--status-danger-text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .remove-photo-btn:hover {
+      text-decoration: underline;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 767px) {
+      .product-page-wrap {
+        margin: 20px auto 60px;
+        padding: 0 14px;
+      }
+
+      .product-visual {
+        padding: clamp(30px, 6vw, 50px) 16px;
+        min-height: 220px;
+      }
+
+      .product-details h1 {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+      }
+
+      .product-price-tag {
+        font-size: 1.5rem;
+      }
+
+      .pill-options {
+        gap: 8px;
+      }
+
+      .pill-options button {
+        padding: 9px 16px;
+        font-size: 0.85rem;
+      }
+
+      .qty-controls {
+        gap: 14px;
+        margin: 16px 0 20px;
+      }
+
+      .qty-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .product-page-wrap {
+        margin: 16px auto 50px;
+        padding: 0 12px;
+      }
+
+      .product-grid {
+        padding: clamp(16px, 4vw, 24px);
+        gap: 24px;
+      }
+
+      .product-visual {
+        min-height: 180px;
+        padding: 30px 14px;
+      }
+
+      .product-details h1 {
+        font-size: 1.4rem;
+      }
+
+      .category-badge {
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+      }
+
+      .product-desc {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+      }
+
+      .custom-group label {
+        font-size: 0.85rem;
+      }
+
+      .pill-options button {
+        padding: 8px 14px;
+        font-size: 0.82rem;
+        flex: 1 1 auto;
+        justify-content: center;
+      }
+
+      .toast-alert {
+        left: 14px;
+        right: 14px;
+        text-align: center;
+        justify-content: center;
+        bottom: 16px;
+        padding: 12px 18px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link">Home</a></li>
+        <li><a href="Menu.html" class="nav-link">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Product Details Wrapper -->
+  <main class="product-page-wrap">
+    <div class="product-top-bar">
+      <div class="back-nav" style="margin-bottom:0;">
+        <a href="Menu.html" data-i18n="btn_back_menu">&larr; Back to Menu Catalog</a>
+      </div>
+      <div class="top-bar-actions">
+        <button type="button" class="btn btn-outline btn-sm" id="btnOpenAddItemModal" data-i18n="btn_add_item">
+          <span>➕</span> Add New Product
+        </button>
+      </div>
+    </div>
+
+    <div class="product-grid" id="product">
+      <!-- Product Visual / Photo Showcase -->
+      <div class="product-visual" id="productVisualBox">
+        <img id="productFeaturedImg" class="product-featured-img" src="" alt="Product Photo" style="display:none;">
+        <span class="visual-icon" id="productImage" style="display:none;">&#9749;</span>
+      </div>
+
+      <!-- Product Configuration Details -->
+      <div class="product-details">
+        <span class="category-badge" id="productCategory">Hot Coffee</span>
+        <h1 id="productName">Cappuccino</h1>
+        <div class="product-price-tag" id="productPrice">$3.50</div>
+        <p class="product-desc" id="productDescription">Espresso balanced with steamed milk and airy velvet microfoam.</p>
+
+        <!-- Size Selection -->
+        <div class="custom-group">
+          <label>Cup Size</label>
+          <div class="pill-options" id="sizeOptions">
+            <button data-price="0" type="button">Small</button>
+            <button data-price="0.50" class="selected" type="button">Medium (+ $0.50)</button>
+            <button data-price="1.00" type="button">Large (+ $1.00)</button>
+          </div>
+        </div>
+
+        <!-- Extras Selection -->
+        <div class="custom-group">
+          <label>Custom Add-ins &amp; Extras</label>
+          <div class="pill-options" id="extraOptions">
+            <button data-price="0.50" type="button">+ Extra Shot ($0.50)</button>
+            <button data-price="0.75" type="button">+ Whipped Cream ($0.75)</button>
+            <button data-price="0.50" type="button">+ Oat Milk ($0.50)</button>
+            <button type="button" class="pill-add-btn" id="btnCustomExtra" data-i18n="btn_custom_extra">+ Custom Extra</button>
+          </div>
+        </div>
+
+        <!-- Quantity Controls -->
+        <div class="qty-controls">
+          <button id="minus" class="qty-btn" type="button" aria-label="Decrease quantity">&minus;</button>
+          <span id="qty" class="qty-display">1</span>
+          <button id="plus" class="qty-btn" type="button" aria-label="Increase quantity">+</button>
+        </div>
+
+        <!-- Add to Cart CTA -->
+        <button class="btn btn-primary btn-lg btn-mobile-full" id="addToCart">
+          Add to Cart &bull; <span id="totalPrice">$4.00</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ai Coffee Shop. Handcrafted with passion. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Add New Product Item Modal -->
+  <div class="modal-backdrop" id="addItemModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalTitle" style="display:flex; align-items:center; gap:8px;">
+          <span>☕</span> <span data-i18n="modal_add_item_title">Add New Product Item</span>
+        </h3>
+        <button type="button" class="modal-close" id="closeAddItemModal" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="addNewItemForm" class="modal-body">
+        <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div class="field">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px;">Product Name *</label>
+            <input type="text" id="newProdName" class="form-control" placeholder="e.g., Caramel Oat Cold Brew" required>
+          </div>
+          <div class="field">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px;">Category *</label>
+            <select id="newProdCat" class="form-control" required>
+              <option value="hot">☕ Hot Coffee</option>
+              <option value="cold" selected>🧊 Cold &amp; Iced Drinks</option>
+              <option value="food">🥐 Food &amp; Pastries</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div class="field">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px;">Base Price ($) *</label>
+            <input type="number" id="newProdPrice" class="form-control" placeholder="4.50" step="0.10" min="0.50" required>
+          </div>
+          <div class="field">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px;">Default Icon / Emoji</label>
+            <input type="text" id="newProdIcon" class="form-control" placeholder="☕, 🧊, 🥐, 🧋, 🍵" value="☕">
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:16px;">
+          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px;">Product Description</label>
+          <textarea id="newProdDesc" class="form-control" rows="2" placeholder="Brief tasting notes or ingredients..."></textarea>
+        </div>
+
+        <!-- Device Photo Upload Section -->
+        <div class="field" style="margin-bottom:18px;">
+          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px;">Product Photo (Device Upload or Web URL)</label>
+          <div class="device-upload-card">
+            <div class="upload-btn-row">
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                <span>📷</span> Choose from Device (Camera / Files)
+                <input type="file" id="newProdPhotoFile" accept="image/*" style="display:none;">
+              </label>
+              <span style="color:var(--text-dim); font-size:0.85rem;">or paste image URL:</span>
+            </div>
+            <input type="url" id="newProdPhotoUrl" class="form-control" placeholder="https://example.com/drink.jpg" style="margin-top:10px;">
+            
+            <div id="newProdPhotoPreview" class="photo-preview-wrap" style="display:none;">
+              <div class="photo-preview-left">
+                <img id="newProdPhotoImg" src="" alt="Photo Preview">
+                <span id="newProdPhotoName" style="font-size:0.85rem; color:var(--text-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px;"></span>
+              </div>
+              <button type="button" class="remove-photo-btn" id="removePhotoBtn">&times; Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelAddItemModal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveNewItem">➕ Save &amp; View Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-alert" id="toast">
+    <span>✅</span> Added to cart successfully!
+    <span id="toastIcon">✅</span>
+    <span id="toastText">Added to cart successfully!</span>
+    <a href="Cart.html" id="toastCartLink" class="btn btn-sm" style="display:none; background:var(--bg-main); color:var(--color-primary); padding:4px 12px; font-size:0.8rem; margin-left:10px; border-radius:var(--radius-full);">View Cart</a>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const productName = params.get('name');
+    if (productName) {
+      document.getElementById('productName').textContent = productName;
+    }
+    if (params.get('price')) {
+      document.getElementById('productPrice').textContent = '$' + Number(params.get('price')).toFixed(2);
+    }
+    if (params.get('desc')) {
+      document.getElementById('productDescription').textContent = params.get('desc');
+    }
+    if (params.get('icon')) {
+      document.getElementById('productImage').innerHTML = params.get('icon');
+    }
+    if (params.get('category')) {
+      document.getElementById('productCategory').textContent = params.get('category');
+    }
+
+    // Check if item has custom uploaded photo from device in localStorage
+    if (productName) {
+      try {
+        const storedMenu = JSON.parse(localStorage.getItem('menuItems') || '[]');
+        const match = storedMenu.find(m => m.name.toLowerCase() === productName.toLowerCase());
+        if (match && match.photo) {
+          document.getElementById('productImage').innerHTML = '<img src="' + match.photo + '" alt="' + match.name + '" style="width:100%; max-height:280px; object-fit:cover; border-radius:var(--radius-md);">';
+        }
+      } catch (e) {}
+    }
+
+    const basePrice = parseFloat(document.getElementById('productPrice').textContent.replace('$', '')) || 3.50;
+    // --- 1. Product State & Elements ---
+    let basePrice = 3.50;
+    let selectedSize = 0.50;
+    let selectedExtras = 0;
+    let qty = 1;
+    let selectedSizeLabel = 'Medium';
+    let selectedExtrasLabels = [];
+
+    const priceEls = {
+      total: document.getElementById('totalPrice'),
+      display: document.getElementById('productPrice')
+    };
+
+    function updatePrice() {
+      const unit = basePrice + selectedSize + selectedExtras;
+      priceEls.display.textContent = '$' + unit.toFixed(2);
+      priceEls.total.textContent = '$' + (unit * qty).toFixed(2);
+    }
+
+    function recalculateExtras() {
+      selectedExtras = 0;
+      selectedExtrasLabels = [];
+      document.querySelectorAll('#extraOptions button.selected').forEach(b => {
+        if (b.id === 'btnCustomExtra') return;
+        selectedExtras += parseFloat(b.dataset.price || 0);
+        selectedExtrasLabels.push(b.textContent.split('(')[0].replace('+', '').trim());
+      });
+      updatePrice();
+    }
+
+    // --- High-Quality Photo Database for Default Menu ---
+    const PRODUCT_DEFAULT_IMAGES = {
+      'espresso': 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=800&auto=format&fit=crop&q=80',
+      'americano': 'https://images.unsplash.com/photo-1551030173-122aabc4489c?w=800&auto=format&fit=crop&q=80',
+      'cappuccino': 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=800&auto=format&fit=crop&q=80',
+      'latte': 'https://images.unsplash.com/photo-1534778101976-62847782c213?w=800&auto=format&fit=crop&q=80',
+      'mocha': 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=800&auto=format&fit=crop&q=80',
+      'caramel macchiato': 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=800&auto=format&fit=crop&q=80',
+      'matcha latte': 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=800&auto=format&fit=crop&q=80',
+      'hot chocolate': 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=800&auto=format&fit=crop&q=80',
+      'cold brew': 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=800&auto=format&fit=crop&q=80',
+      'iced latte': 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=800&auto=format&fit=crop&q=80',
+      'iced caramel frappe': 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=800&auto=format&fit=crop&q=80',
+      'mango smoothie': 'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=800&auto=format&fit=crop&q=80',
+      'lemon iced tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&auto=format&fit=crop&q=80',
+      'butter croissant': 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&auto=format&fit=crop&q=80',
+      'chocolate muffin': 'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=800&auto=format&fit=crop&q=80',
+      'cheesecake': 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800&auto=format&fit=crop&q=80',
+      'ham & cheese sandwich': 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=800&auto=format&fit=crop&q=80'
+    };
+
+    function getProductPhoto(name, explicitPhoto) {
+      if (explicitPhoto && explicitPhoto.trim()) return explicitPhoto.trim();
+      try {
+        const stored = JSON.parse(localStorage.getItem('menuItems') || '[]');
+        const found = stored.find(i => (i.name || '').toLowerCase() === (name || '').toLowerCase());
+        if (found && found.photo && found.photo.trim()) return found.photo.trim();
+      } catch (e) {}
+      const key = (name || '').toLowerCase().trim();
+      if (PRODUCT_DEFAULT_IMAGES[key]) return PRODUCT_DEFAULT_IMAGES[key];
+      for (const [k, url] of Object.entries(PRODUCT_DEFAULT_IMAGES)) {
+        if (key.includes(k) || k.includes(key)) return url;
+      }
+      return '';
+    }
+
+    let currentProductPhoto = '';
+
+    function loadProduct(prod) {
+      if (prod.name) document.getElementById('productName').textContent = prod.name;
+      if (prod.price !== undefined) {
+        basePrice = parseFloat(prod.price) || 3.50;
+      }
+      if (prod.desc !== undefined) {
+        document.getElementById('productDescription').textContent = prod.desc || 'Handcrafted specialty beverage brewed fresh for you.';
+      }
+      if (prod.category) {
+        document.getElementById('productCategory').textContent = prod.category;
+      }
+      
+      const resolvedPhoto = getProductPhoto(prod.name, prod.photo);
+      currentProductPhoto = resolvedPhoto;
+
+      const imgEl = document.getElementById('productFeaturedImg');
+      const iconEl = document.getElementById('productImage');
+
+      if (resolvedPhoto) {
+        imgEl.src = resolvedPhoto;
+        imgEl.alt = prod.name || 'Coffee';
+        imgEl.style.display = 'block';
+        iconEl.style.display = 'none';
+        imgEl.onerror = function () {
+          this.style.display = 'none';
+          iconEl.style.display = 'block';
+          iconEl.innerHTML = prod.icon || '&#9749;';
+        };
+      } else {
+        imgEl.style.display = 'none';
+        iconEl.style.display = 'block';
+        iconEl.innerHTML = prod.icon || '&#9749;';
+      }
+
+      qty = 1;
+      document.getElementById('qty').textContent = qty;
+      updatePrice();
+    }
+
+    // --- 2. Initialize from URL Parameters or LocalStorage ---
+    const params = new URLSearchParams(window.location.search);
+    const initialName = params.get('name') || 'Cappuccino';
+    const initialPrice = params.get('price') ? parseFloat(params.get('price')) : 3.50;
+    const initialDesc = params.get('desc') || 'Espresso balanced with steamed milk and airy velvet microfoam.';
+    const initialCategory = params.get('category') || 'Hot Coffee';
+    const initialIcon = params.get('icon') || '&#9749;';
+    const initialPhoto = params.get('photo') || '';
+
+    loadProduct({
+      name: initialName,
+      price: initialPrice,
+      desc: initialDesc,
+      category: initialCategory,
+      icon: initialIcon,
+      photo: initialPhoto
+    });
+
+    // --- 3. Size & Extras Pill Selection ---
+    document.querySelectorAll('#sizeOptions button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#sizeOptions button').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSize = parseFloat(btn.dataset.price);
+        selectedSize = parseFloat(btn.dataset.price || 0);
+        selectedSizeLabel = btn.textContent.split('(')[0].trim();
+        updatePrice();
+      });
+    });
+
+    document.querySelectorAll('#extraOptions button').forEach(btn => {
+      if (btn.id === 'btnCustomExtra') return;
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('selected');
+        selectedExtras = 0;
+        selectedExtrasLabels = [];
+        document.querySelectorAll('#extraOptions button.selected').forEach(b => {
+          selectedExtras += parseFloat(b.dataset.price);
+          selectedExtrasLabels.push(b.textContent.split('(')[0].replace('+', '').trim());
+        });
+        updatePrice();
+        recalculateExtras();
+      });
+    });
+
+    // Custom Extra Button (+ Custom Item)
+    document.getElementById('btnCustomExtra').addEventListener('click', function () {
+      const extraName = prompt('Enter custom add-in or flavor item (e.g., Caramel Drizzle, Honey, Vanilla Syrup):');
+      if (!extraName || !extraName.trim()) return;
+      const extraPriceStr = prompt('Enter price for ' + extraName.trim() + ' in $ (e.g., 0.50, or 0 for free):', '0.50');
+      const extraPrice = parseFloat(extraPriceStr) || 0;
+
+      const newBtn = document.createElement('button');
+      newBtn.type = 'button';
+      newBtn.dataset.price = extraPrice.toFixed(2);
+      newBtn.className = 'selected';
+      newBtn.textContent = '+ ' + extraName.trim() + ' ($' + extraPrice.toFixed(2) + ')';
+      newBtn.addEventListener('click', () => {
+        newBtn.classList.toggle('selected');
+        recalculateExtras();
+      });
+
+      const container = document.getElementById('extraOptions');
+      container.insertBefore(newBtn, this);
+      recalculateExtras();
+      showToast('Added custom add-in: ' + extraName.trim());
+    });
+
+    // --- 4. Quantity Adjustments ---
+    document.getElementById('minus').addEventListener('click', () => {
+      if (qty > 1) {
+        qty--;
+        document.getElementById('qty').textContent = qty;
+        updatePrice();
+      }
+    });
+
+    document.getElementById('plus').addEventListener('click', () => {
+      qty++;
+      document.getElementById('qty').textContent = qty;
+      updatePrice();
+    });
+
+    function updatePrice() {
+      const unit = basePrice + selectedSize + selectedExtras;
+      priceEls.display.textContent = '$' + unit.toFixed(2);
+      priceEls.total.textContent = '$' + (unit * qty).toFixed(2);
+    }
+
+    updatePrice();
+
+    // --- 5. Add to Cart Handler ---
+    document.getElementById('addToCart').addEventListener('click', () => {
+      const name = document.getElementById('productName').textContent;
+      const icon = document.getElementById('productImage').innerHTML;
+      const unitPrice = basePrice + selectedSize + selectedExtras;
+      const item = {
+        name,
+        icon,
+        photo: currentProductPhoto,
+        size: selectedSizeLabel,
+        extras: selectedExtrasLabels,
+        unitPrice: parseFloat(unitPrice.toFixed(2)),
+        qty,
+        lineTotal: parseFloat((unitPrice * qty).toFixed(2))
+      };
+
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      cart.push(item);
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      // Instant live update of all cart badges
+      if (window.updateCartBadge) {
+        window.updateCartBadge();
+      }
+
+      showToast('Added ' + qty + 'x ' + name + ' to cart!', true);
+    });
+
+    // --- 6. Toast Notification Helper ---
+    let toastTimeout;
+    function showToast(msg, showCartBtn) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toastText');
+      const cartLink = document.getElementById('toastCartLink');
+
+      text.textContent = msg;
+      if (cartLink) {
+        cartLink.style.display = showCartBtn ? 'inline-flex' : 'none';
+      }
+
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, showCartBtn ? 3800 : 2500);
+    }
+
+    // --- 7. Add New Product Item Modal Controller ---
+    const addItemModal = document.getElementById('addItemModal');
+    const btnOpenModal = document.getElementById('btnOpenAddItemModal');
+    const btnCloseModal = document.getElementById('closeAddItemModal');
+    const btnCancelModal = document.getElementById('cancelAddItemModal');
+    let currentUploadedPhoto = '';
+
+    function openModal() {
+      addItemModal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('newProdName').focus();
+    }
+
+    function closeModal() {
+      addItemModal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    if (btnOpenModal) btnOpenModal.addEventListener('click', openModal);
+    if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
+    if (btnCancelModal) btnCancelModal.addEventListener('click', closeModal);
+
+    addItemModal.addEventListener('click', (e) => {
+      if (e.target === addItemModal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && addItemModal.classList.contains('show')) {
+        closeModal();
+      }
+    });
+
+    // Client-side image compression for device photos (mobile camera & gallery)
+    function compressImage(file, maxDim, quality, callback) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          callback(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    document.getElementById('newProdPhotoFile').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      compressImage(file, 600, 0.75, function (dataUrl) {
+        currentUploadedPhoto = dataUrl;
+        document.getElementById('newProdPhotoImg').src = dataUrl;
+        document.getElementById('newProdPhotoName').textContent = file.name;
+        document.getElementById('newProdPhotoPreview').style.display = 'flex';
+        document.getElementById('newProdPhotoUrl').value = '';
+      });
+    });
+
+    document.getElementById('newProdPhotoUrl').addEventListener('input', function () {
+      const url = this.value.trim();
+      if (url) {
+        currentUploadedPhoto = url;
+        document.getElementById('newProdPhotoImg').src = url;
+        document.getElementById('newProdPhotoName').textContent = 'Web Image Link';
+        document.getElementById('newProdPhotoPreview').style.display = 'flex';
+      } else if (!document.getElementById('newProdPhotoFile').files.length) {
+        currentUploadedPhoto = '';
+        document.getElementById('newProdPhotoPreview').style.display = 'none';
+      }
+    });
+
+    document.getElementById('removePhotoBtn').addEventListener('click', function () {
+      currentUploadedPhoto = '';
+      document.getElementById('newProdPhotoFile').value = '';
+      document.getElementById('newProdPhotoUrl').value = '';
+      document.getElementById('newProdPhotoPreview').style.display = 'none';
+    });
+
+    // Form submission for adding product to menu catalog
+    document.getElementById('addNewItemForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const name = document.getElementById('newProdName').value.trim();
+      const category = document.getElementById('newProdCat').value;
+      const price = parseFloat(document.getElementById('newProdPrice').value) || 3.50;
+      const icon = document.getElementById('newProdIcon').value.trim() || '☕';
+      const desc = document.getElementById('newProdDesc').value.trim();
+      const photo = currentUploadedPhoto || '';
+
+      const newItem = {
+        name,
+        price,
+        category,
+        icon,
+        desc,
+        photo
+      };
+
+      if (window.CoffeeAPI) {
+        await window.CoffeeAPI.saveMenuItem(newItem);
+      } else {
+        let menuItems = [];
+        try {
+          menuItems = JSON.parse(localStorage.getItem('menuItems') || '[]');
+        } catch (err) {
+          menuItems = [];
+        }
+        const existingIdx = menuItems.findIndex(m => m.name.toLowerCase() === name.toLowerCase());
+        if (existingIdx >= 0) {
+          menuItems[existingIdx] = newItem;
+        } else {
+          menuItems.unshift(newItem);
+        }
+        localStorage.setItem('menuItems', JSON.stringify(menuItems));
+      }
+
+      // Close modal and reset form
+      closeModal();
+      this.reset();
+      currentUploadedPhoto = '';
+      document.getElementById('newProdPhotoPreview').style.display = 'none';
+
+      // Load and display the new product on Product.html immediately!
+      const catLabel = category === 'food' ? 'Food & Pastries' : category === 'cold' ? 'Cold & Iced Drinks' : 'Hot Coffee';
+      loadProduct({
+        name,
+        price,
+        category: catLabel,
+        icon,
+        desc,
+        photo
+      });
+
+      // Update URL parameters so refresh keeps newly added product
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('name', name);
+      newUrl.searchParams.set('price', price.toFixed(2));
+      newUrl.searchParams.set('category', catLabel);
+      newUrl.searchParams.set('desc', desc);
+      newUrl.searchParams.set('icon', icon);
+      window.history.pushState({}, '', newUrl.toString());
+
+      showToast('🎉 ' + name + ' added to menu catalog!');
+    });
+  </script>
+  <script src="js/product.js"></script>
+</body>
+</html>

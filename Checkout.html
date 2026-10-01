@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .checkout-wrap {
+      max-width: 1100px;
+      margin: 20px auto 80px;
+      padding: 0 20px;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .checkout-form-box {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .checkout-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: clamp(20px, 4vw, 30px);
+    }
+
+    .checkout-block h2 {
+      font-size: 1.25rem;
+      color: var(--color-primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .radio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 767px) {
+      .checkout-wrap {
+        margin: 16px auto 60px;
+        padding: 0 14px;
+      }
+
+      .checkout-block {
+        padding: clamp(16px, 4vw, 24px);
+      }
+
+      .checkout-block h2 {
+        font-size: 1.1rem;
+        margin-bottom: 16px;
+      }
+
+      .checkout-summary-card {
+        padding: clamp(16px, 4vw, 22px);
+        position: static;
+      }
+
+      .checkout-summary-card h2 {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .radio-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .radio-card {
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .checkout-wrap {
+        margin: 12px auto 50px;
+        padding: 0 12px;
+      }
+
+      .checkout-block {
+        padding: 14px 12px;
+      }
+
+      .radio-card {
+        padding: 12px 14px;
+      }
+
+      .order-item-row {
+        font-size: 0.82rem;
+      }
+    }
+
+    .radio-card {
+      position: relative;
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      border-radius: var(--radius-sm);
+      padding: 16px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .radio-card input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .radio-card:hover {
+      border-color: var(--color-primary);
+    }
+
+    .radio-card.selected {
+      border-color: var(--color-primary);
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    .radio-card .radio-title {
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .radio-card .radio-icon {
+      font-size: 1.5rem;
+    }
+
+    /* Summary Card */
+    .checkout-summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: clamp(20px, 4vw, 28px);
+      position: sticky;
+      top: calc(var(--nav-height) + 20px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .checkout-summary-card h2 {
+      font-size: 1.25rem;
+      color: var(--text-main);
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .order-items-scroll {
+      max-height: 240px;
+      overflow-y: auto;
+      margin-bottom: 18px;
+      padding-right: 4px;
+    }
+
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(62, 39, 22, 0.6);
+    }
+
+    .order-item-row:last-child {
+      border-bottom: none;
+    }
+
+    .order-item-row .name {
+      flex: 1;
+      padding-right: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .summary-row.total {
+      border-top: 1px solid var(--border-color);
+      padding-top: 14px;
+      margin-top: 14px;
+      color: var(--text-main);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .summary-row.total .amount {
+      color: var(--color-primary);
+    }
+  </style>
+  <link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link">Home</a></li>
+        <li><a href="Menu.html" class="nav-link">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>Complete Your <span>Order</span></h1>
+    <p>Please enter your contact details and preferred delivery method.</p>
+  </div>
+
+  <main class="checkout-wrap">
+    <form class="checkout-grid" id="checkoutForm">
+      <!-- Left: Form Inputs -->
+      <div class="checkout-form-box">
+        <!-- Contact Information Block -->
+        <div class="checkout-block">
+          <h2><span>📍</span> Contact &amp; Delivery Address</h2>
+          <div class="form-row">
+            <div class="field">
+              <label>Full Name *</label>
+              <input type="text" id="fullName" class="form-control" placeholder="Jane Doe" required>
+            </div>
+            <div class="field">
+              <label>Phone Number *</label>
+              <input type="tel" id="phone" class="form-control" placeholder="+1 (555) 000-0000" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Email Address *</label>
+              <input type="email" id="email" class="form-control" placeholder="jane@example.com" required>
+            </div>
+            <div class="field">
+              <label>Street Address *</label>
+              <input type="text" id="address" class="form-control" placeholder="Apt 4B, 123 Main St" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>City *</label>
+              <input type="text" id="city" class="form-control" placeholder="Cityville" required>
+            </div>
+            <div class="field">
+              <label>Delivery Method</label>
+              <select id="delivery" class="form-control">
+                <option value="2.00">Standard Delivery — $2.00 (30–45 mins)</option>
+                <option value="5.00">Priority Express — $5.00 (15–25 mins)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method Block -->
+        <div class="checkout-block">
+          <h2><span>💳</span> Payment Method</h2>
+          <div class="radio-grid">
+            <label class="radio-card selected">
+              <input type="radio" name="pay" value="Cash on Delivery" checked>
+              <span class="radio-icon">💵</span>
+              <span class="radio-title">Cash on Delivery</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="pay" value="Credit Card">
+              <span class="radio-icon">💳</span>
+              <span class="radio-title">Credit Card</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="pay" value="E-Wallet">
+              <span class="radio-icon">📱</span>
+              <span class="radio-title">E-Wallet</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Sticky Order Summary -->
+      <aside class="checkout-summary-card">
+        <h2 data-i18n="cart_summary">Your Order Summary</h2>
+        <div class="order-items-scroll" id="orderItems"></div>
+
+        <div class="summary-row">
+          <span data-i18n="cart_subtotal">Subtotal</span>
+          <span id="subtotal">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span data-i18n="cart_tax">Sales Tax (8%)</span>
+          <span id="tax">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span data-i18n="cart_shipping">Delivery Fee</span>
+          <span id="deliveryFee">$2.00</span>
+        </div>
+        <div class="summary-row total">
+          <span data-i18n="cart_total">Grand Total</span>
+          <span class="amount" id="total">$0.00</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="placeOrder" style="margin-top: 20px;">
+          Confirm &amp; Place Order &rarr;
+        </button>
+      </aside>
+    </form>
+  </main>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ai Coffee Shop. Handcrafted with passion. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    // Radio card active state styling
+    document.querySelectorAll('.radio-card input').forEach(input => {
+      input.addEventListener('change', () => {
+        document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+        input.closest('.radio-card').classList.add('selected');
+      });
+    });
+
+    function renderOrder() {
+      const subtotal = cart.reduce((sum, item) => sum + (Number(item.lineTotal) || 0), 0);
+      const tax = subtotal * 0.08;
+      const delivery = parseFloat(document.getElementById('delivery').value) || 2.00;
+      const orderItems = document.getElementById('orderItems');
+
+      orderItems.innerHTML = '';
+      if (cart.length === 0) {
+        orderItems.innerHTML = '<p style="color:var(--text-muted); padding: 15px 0;">Your cart is empty. Please add items from the menu first.</p>';
+      } else {
+        cart.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'order-item-row';
+          div.innerHTML = `
+            <span class="name">${item.icon || '☕'} ${item.name} &times; ${item.qty}</span>
+            <span style="font-weight:600; color:var(--text-main);">$${Number(item.lineTotal).toFixed(2)}</span>
+          `;
+          orderItems.appendChild(div);
+        });
+      }
+
+      document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+      document.getElementById('tax').textContent = '$' + tax.toFixed(2);
+      document.getElementById('deliveryFee').textContent = '$' + delivery.toFixed(2);
+      document.getElementById('total').textContent = '$' + (subtotal + tax + delivery).toFixed(2);
+    }
+
+    document.getElementById('delivery').addEventListener('change', renderOrder);
+
+    document.getElementById('checkoutForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!cart || cart.length === 0) {
+        alert('Your cart is empty. Please add items to your cart before checking out.');
+        location.href = 'Menu.html';
+        return;
+      }
+
+      const payment = document.querySelector('input[name="pay"]:checked').value;
+      const name = document.getElementById('fullName').value.trim();
+      const address = document.getElementById('address').value.trim() + ', ' + document.getElementById('city').value.trim();
+      const subtotal = cart.reduce((sum, item) => sum + item.lineTotal, 0);
+      const tax = subtotal * 0.08;
+      const delivery = parseFloat(document.getElementById('delivery').value);
+      const orderNumber = String(Math.floor(Math.random() * 900000) + 100000);
+
+      const order = {
+        number: orderNumber,
+        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+        name,
+        address,
+        payment,
+        items: cart,
+        subtotal,
+        tax,
+        delivery,
+        total: subtotal + tax + delivery
+      };
+
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      localStorage.setItem('lastOrder', JSON.stringify(order));
+      localStorage.removeItem('cart');
+
+      if (window.updateCartBadge) {
+        window.updateCartBadge();
+      }
+
+      window.location.href = 'Order.html';
+    });
+
+    renderOrder();
+  </script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

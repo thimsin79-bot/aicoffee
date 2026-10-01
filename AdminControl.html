@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Control Center — Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admin-wrap {
+      max-width: 1100px;
+      margin: 30px auto 80px;
+      padding: 0 20px;
+    }
+
+    .admin-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .admin-head h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+    }
+
+    /* Scrollable Admin Tabs */
+    .admin-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .admin-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .admin-tabs button {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      padding: 10px 22px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      font-size: 0.92rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .admin-tabs button:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .admin-tabs button.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #040914;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+    }
+
+    .tab-body {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-body.show {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Device File Upload Component Styles */
+    .upload-field-container {
+      background: var(--bg-surface);
+      border: 1px dashed var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 6px;
+      transition: var(--transition);
+    }
+
+    .upload-field-container:hover {
+      border-color: var(--color-primary);
+    }
+
+    .upload-actions-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .device-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--color-primary);
+      color: var(--color-primary);
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .device-upload-btn:hover {
+      background: var(--color-primary);
+      color: #040914;
+    }
+
+    .upload-divider {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .url-input-wrap {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    /* Live Preview Box */
+    .preview-box {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .preview-thumbnail {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: #000;
+      object-fit: cover;
+    }
+
+    .preview-info {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .preview-info h5 {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .preview-info p {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .btn-clear-preview {
+      background: transparent;
+      border: 1px solid var(--status-danger-border);
+      color: var(--status-danger-text);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-clear-preview:hover {
+      background: var(--status-danger-border);
+      color: #fff;
+    }
+
+    /* List Row Item */
+    .row-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .row-item .item-main {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .row-item .item-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .row-item .item-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .row-item .actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Gallery Grid */
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .photo-gallery {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .admin-wrap {
+        margin: 20px auto 60px;
+        padding: 0 14px;
+      }
+
+      .admin-tabs {
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .admin-tabs button {
+        padding: 9px 18px;
+        font-size: 0.85rem;
+      }
+
+      .row-item {
+        padding: 12px 14px;
+        gap: 12px;
+      }
+
+      .row-item .item-main {
+        min-width: 150px;
+      }
+
+      .row-item .actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+
+      .upload-actions-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .url-input-wrap {
+        min-width: 100%;
+      }
+
+      .device-upload-btn {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .photo-gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .admin-wrap {
+        margin: 16px auto 50px;
+        padding: 0 12px;
+      }
+
+      .admin-head h1 {
+        font-size: 1.5rem;
+      }
+
+      .admin-tabs button {
+        padding: 8px 16px;
+        font-size: 0.82rem;
+      }
+
+      .photo-gallery {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .preview-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .preview-thumbnail {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16/9;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .photo-gallery {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .photo-card {
+      position: relative;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: #000;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-card .del-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fca5a5;
+      border: 1px solid #ef4444;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: var(--transition);
+    }
+
+    .photo-card .del-btn:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .photo-card .caption-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.78);
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      color: var(--text-main);
+    }
+
+    .save-feedback-pill {
+      color: var(--status-success-text);
+      font-size: 0.9rem;
+      margin-top: 14px;
+      display: none;
+    }
+  </style>
+  <link rel="stylesheet" href="css/admin-control.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link">Home</a></li>
+        <li><a href="Menu.html" class="nav-link">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link active">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-wrap">
+    <div class="admin-head">
+      <div>
+        <h1>Control <span>Center</span></h1>
+        <p style="color:var(--text-muted); font-size:0.95rem;">Manage shop info, customize menu items, upload photos from any device, and manage files.</p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <button type="button" class="btn-add-product" id="btnTopAddProduct" title="Add new product item to catalog">
+          <span class="plus-icon">✚</span> Add New Product
+        </button>
+        <a href="Home.html" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm back-to-site-btn" id="btnBackToSite" title="Opens live site in a new tab to keep you on the Control Center">🌐 Back to Site ↗</a>
+        <button type="button" class="btn btn-secondary btn-sm" id="btnPreviewSite" title="Live storefront preview">👁️ Preview Site</button>
+        <a href="Admin.html" class="btn btn-secondary btn-sm">&larr; Back to Dashboard</a>
+      </div>
+    </div>
+
+    <!-- Admin Tabs -->
+    <div class="admin-tabs">
+      <button class="active" data-tab="tab-info">🏪 Shop Profile</button>
+      <button data-tab="tab-menu">☕ Menu Catalog Items</button>
+      <button data-tab="tab-photos">📸 Gallery Photos</button>
+      <button data-tab="tab-files">📁 File Attachments</button>
+    </div>
+
+    <!-- 1. SHOP INFO TAB -->
+    <section class="tab-body show" id="tab-info">
+      <div class="panel">
+        <h2 style="font-size:1.25rem; color:var(--color-primary); margin-bottom:18px;">Store Profile &amp; Location</h2>
+        <form id="infoForm">
+          <div class="form-row">
+            <div class="field">
+              <label>Store Business Name</label>
+              <input type="text" id="shopName" class="form-control" required>
+            </div>
+            <div class="field">
+              <label>Brand Tagline</label>
+              <input type="text" id="shopTagline" class="form-control">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Official Email</label>
+              <input type="email" id="shopEmail" class="form-control" required>
+            </div>
+            <div class="field">
+              <label>Customer Support Phone</label>
+              <input type="tel" id="shopPhone" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Store Physical Address</label>
+              <input type="text" id="shopAddress" class="form-control" required>
+            </div>
+            <div class="field">
+              <label>Opening Hours</label>
+              <input type="text" id="shopHours" class="form-control" placeholder="7:00 AM — 9:00 PM">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>About Store Story</label>
+            <textarea id="shopAbout" class="form-control" rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Shop Info</button>
+          <p class="save-feedback-pill" id="infoSaved">✅ Store information updated successfully!</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- 2. MENU MANAGEMENT TAB -->
+    <section class="tab-body" id="tab-menu">
+      <div class="panel" style="margin-bottom: 24px;">
+        <h2 style="font-size:1.25rem; color:var(--color-primary); margin-bottom:18px;" id="menuFormTitle">Add New Menu Item</h2>
+        <form id="menuForm">
+          <div class="form-row">
+            <div class="field">
+              <label>Item Name *</label>
+              <input type="text" id="miName" class="form-control" placeholder="e.g. Hazelnut Caramel Latte" required>
+            </div>
+            <div class="field">
+              <label>Base Price ($) *</label>
+              <input type="number" id="miPrice" class="form-control" step="0.01" min="0" placeholder="4.50" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Category *</label>
+              <select id="miCategory" class="form-control">
+                <option value="hot">Espresso &amp; Hot Coffee</option>
+                <option value="cold">Cold &amp; Iced Drinks</option>
+                <option value="food">Food &amp; Pastries</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Display Icon / Emoji (Fallback)</label>
+              <input type="text" id="miIcon" class="form-control" placeholder="☕ or emoji">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Flavor Notes / Description</label>
+            <input type="text" id="miDesc" class="form-control" placeholder="Smooth espresso with sweet Madagascar vanilla and velvety milk.">
+          </div>
+
+          <!-- PHOTO UPLOAD FROM ANY DEVICE OR WEB URL -->
+          <div class="form-group">
+            <label>Item Photo (Upload from Any Device or Paste URL)</label>
+            <div class="upload-field-container">
+              <div class="upload-actions-bar">
+                <label class="device-upload-btn" for="miFileInput">
+                  <span>📱 / 💻</span> Choose Image from Device
+                  <input type="file" id="miFileInput" accept="image/*" style="display:none;">
+                </label>
+                <span class="upload-divider">or paste URL:</span>
+                <div class="url-input-wrap">
+                  <input type="url" id="miPhoto" class="form-control" placeholder="https://images.unsplash.com/...">
+                </div>
+              </div>
+
+              <!-- Live Photo Preview -->
+              <div class="preview-box" id="miPreviewBox" style="display:none;">
+                <img id="miPreviewImg" class="preview-thumbnail" src="" alt="Menu item preview">
+                <div class="preview-info">
+                  <h5 id="miPreviewName">Selected Image</h5>
+                  <p id="miPreviewSize">Ready to save</p>
+                </div>
+                <button type="button" class="btn-clear-preview" id="miClearPhotoBtn">Remove Photo</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:16px;">
+            <button type="submit" class="btn btn-primary" id="saveMenuBtn">Save Menu Item</button>
+            <button type="button" class="btn btn-secondary" id="cancelEditMenuBtn" style="display:none;">Cancel Edit</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2 style="font-size:1.25rem; color:var(--color-primary); margin-bottom:18px;">Active Menu Items</h2>
+        <div id="menuList"></div>
+      </div>
+    </section>
+
+    <!-- 3. PHOTOS TAB -->
+    <section class="tab-body" id="tab-photos">
+      <div class="panel" style="margin-bottom: 24px;">
+        <h2 style="font-size:1.25rem; color:var(--color-primary); margin-bottom:18px;">Add New Photo to Gallery</h2>
+        <form id="photoForm">
+          <div class="form-group">
+            <label>Photo Caption / Title *</label>
+            <input type="text" id="phCaption" class="form-control" placeholder="Barista crafting fresh latte art" required>
+          </div>
+
+          <!-- PHOTO UPLOAD FROM ANY DEVICE OR URL -->
+          <div class="form-group">
+            <label>Gallery Image (Upload from Any Device or Paste URL)</label>
+            <div class="upload-field-container">
+              <div class="upload-actions-bar">
+                <label class="device-upload-btn" for="phFileInput">
+                  <span>📱 / 💻</span> Choose Image from Device
+                  <input type="file" id="phFileInput" accept="image/*" style="display:none;">
+                </label>
+                <span class="upload-divider">or paste URL:</span>
+                <div class="url-input-wrap">
+                  <input type="url" id="phUrl" class="form-control" placeholder="https://images.unsplash.com/...">
+                </div>
+              </div>
+
+              <!-- Live Photo Preview -->
+              <div class="preview-box" id="phPreviewBox" style="display:none;">
+                <img id="phPreviewImg" class="preview-thumbnail" src="" alt="Gallery photo preview">
+                <div class="preview-info">
+                  <h5 id="phPreviewName">Gallery Image Ready</h5>
+                  <p id="phPreviewSize">Optimized for web</p>
+                </div>
+                <button type="button" class="btn-clear-preview" id="phClearPhotoBtn">Remove Photo</button>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:16px;">Add Photo to Gallery</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2 style="font-size:1.25rem; color:var(--color-primary); margin-bottom:18px;">Photo Gallery</h2>
+        <div class="photo-gallery" id="gallery"></div>
+      </div>
+    </section>
+
+    <!-- 4. FILES TAB -->
+    <section class="tab-body" id="tab-files">
+      <div class="panel" style="margin-bottom: 24px;">
+        <h2 style="font-size:1.25rem; color:var(--color-primary); margin-bottom:18px;">Add Document / Menu File</h2>
+        <form id="fileForm">
+          <div class="form-group">
+            <label>File Label / Title *</label>
+            <input type="text" id="flName" class="form-control" placeholder="Spring_Drink_Specials.pdf" required>
+          </div>
+
+          <div class="form-group">
+            <label>File Source (Upload from Any Device or Document URL)</label>
+            <div class="upload-field-container">
+              <div class="upload-actions-bar">
+                <label class="device-upload-btn" for="flFileInput">
+                  <span>📁</span> Select File from Device
+                  <input type="file" id="flFileInput" style="display:none;">
+                </label>
+                <span class="upload-divider">or paste URL/path:</span>
+                <div class="url-input-wrap">
+                  <input type="text" id="flUrl" class="form-control" placeholder="docs/menu.pdf or https://...">
+                </div>
+              </div>
+              <p id="flSelectedNotice" style="color:var(--status-success-text); font-size:0.85rem; margin-top:10px; display:none;">
+                ✅ File loaded from device and ready to save.
+              </p>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:16px;">Add File Attachment</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2 style="font-size:1.25rem; color:var(--color-primary); margin-bottom:18px;">Stored Attachments</h2>
+        <div id="fileList"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Live Preview Modal -->
+  <div class="preview-modal-backdrop" id="previewModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; flex-direction:column; padding:16px;">
+    <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-lg); width:100%; max-width:1100px; height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:var(--shadow-lg);">
+      <div style="padding:14px 20px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <h3 style="margin:0; font-size:1.05rem; color:var(--text-main);">👁️ Live Storefront Preview</h3>
+          <div style="display:inline-flex; gap:6px; background:var(--bg-card); padding:3px 6px; border-radius:var(--radius-full); border:1px solid var(--border-color);">
+            <button type="button" id="previewModeDesktop" class="btn btn-sm" style="padding:4px 12px; font-size:0.75rem; background:var(--color-primary); color:#000;">🖥️ Desktop</button>
+            <button type="button" id="previewModeTablet" class="btn btn-sm" style="padding:4px 12px; font-size:0.75rem; background:transparent; color:var(--text-muted);">📱 Tablet</button>
+            <button type="button" id="previewModeMobile" class="btn btn-sm" style="padding:4px 12px; font-size:0.75rem; background:transparent; color:var(--text-muted);">📱 Mobile</button>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <a href="Home.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.8rem;">Open Full Tab ↗</a>
+          <button type="button" id="btnClosePreview" class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:1rem;">✕</button>
+        </div>
+      </div>
+      <div style="flex:1; background:#080e1a; display:flex; justify-content:center; align-items:center; overflow:hidden; padding:10px;">
+        <iframe id="previewFrame" src="Home.html" style="width:100%; height:100%; border:none; border-radius:var(--radius-sm); transition:width 0.3s ease; background:#fff;"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ai Coffee Shop. Handcrafted with passion. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const LS = {
+      shop: 'shopInfo',
+      menu: 'menuItems',
+      photos: 'gallery',
+      files: 'fileList'
+    };
+
+    const defaultMenu = [
+      { name: 'Espresso', price: 2.50, category: 'hot', icon: '&#9749;', desc: 'Rich and bold single shot espresso.', photo: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Americano', price: 3.00, category: 'hot', icon: '&#9749;', desc: 'Espresso topped with hot water.', photo: 'https://images.unsplash.com/photo-1551030173-122aabc4489c?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Cappuccino', price: 3.50, category: 'hot', icon: '&#9749;', desc: 'Espresso with creamy steamed milk.', photo: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Latte', price: 3.80, category: 'hot', icon: '&#9749;', desc: 'Smooth milk coffee with a soft foam.', photo: 'https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Mocha', price: 4.20, category: 'hot', icon: '&#9749;', desc: 'Espresso, chocolate and steamed milk.', photo: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Caramel Macchiato', price: 4.50, category: 'hot', icon: '&#9749;', desc: 'Espresso with vanilla, milk and caramel.', photo: 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Matcha Latte', price: 4.30, category: 'hot', icon: '&#127861;', desc: 'Ceremonial matcha with steamed milk.', photo: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Hot Chocolate', price: 3.60, category: 'hot', icon: '&#127861;', desc: 'Velvety cocoa with marshmallows.', photo: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Cold Brew', price: 4.00, category: 'cold', icon: '&#127853;', desc: 'Slow-steeped, smooth and refreshing.', photo: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Iced Latte', price: 4.00, category: 'cold', icon: '&#127865;', desc: 'Chilled espresso with cold milk.', photo: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Iced Caramel Frappe', price: 4.80, category: 'cold', icon: '&#127864;', desc: 'Blended coffee, caramel and ice.', photo: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Mango Smoothie', price: 4.50, category: 'cold', icon: '&#127865;', desc: 'Fresh mango blended with yogurt.', photo: 'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Lemon Iced Tea', price: 3.20, category: 'cold', icon: '&#127866;', desc: 'Refreshing tea with lemon zest.', photo: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Butter Croissant', price: 2.80, category: 'food', icon: '&#127828;', desc: 'Flaky, golden and buttery.', photo: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Chocolate Muffin', price: 2.50, category: 'food', icon: '&#127836;', desc: 'Moist muffin with chocolate chunks.', photo: 'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Cheesecake', price: 4.90, category: 'food', icon: '&#127853;', desc: 'Creamy New York style slice.', photo: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&auto=format&fit=crop&q=80' },
+      { name: 'Ham & Cheese Sandwich', price: 5.50, category: 'food', icon: '&#129368;', desc: 'Grilled sandwich with melted cheese.', photo: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80' }
+    ];
+
+    const shopDefault = {
+      name: 'Ai Coffee Shop',
+      tagline: 'Freshly brewed specialty coffee, crafted with passion.',
+      email: 'hello@aicoffershop.com',
+      phone: '+1 555-0123',
+      address: '123 Coffee Street, Cityville',
+      hours: '7:00 AM — 9:00 PM',
+      about: 'At Ai Coffee Shop, we believe great coffee brings people together.'
+    };
+
+    function load(key, fallback) {
+      const data = localStorage.getItem(key);
+      if (data !== null) {
+        try { return JSON.parse(data); } catch (e) {}
+      }
+      return JSON.parse(JSON.stringify(fallback));
+    }
+
+    function save(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    const shop = load(LS.shop, shopDefault);
+    let menu = load(LS.menu, defaultMenu);
+    // Ensure all items have photos populated
+    menu = menu.map(item => {
+      if (!item.photo || !item.photo.trim()) {
+        const found = defaultMenu.find(d => d.name.toLowerCase() === item.name.toLowerCase());
+        if (found && found.photo) item.photo = found.photo;
+      }
+      return item;
+    });
+    save(LS.menu, menu);
+
+    let photos = load(LS.photos, []);
+    let files = load(LS.files, []);
+
+    // Helper: Client-side Image Resizer & Compressor for localStorage efficiency
+    function processImageFile(file, maxDimension, quality, callback) {
+      if (!file || !file.type.startsWith('image/')) {
+        alert('Please select a valid image file.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          let w = img.width;
+          let h = img.height;
+          const max = maxDimension || 600;
+
+          if (w > max || h > max) {
+            if (w > h) {
+              h = Math.round((h * max) / w);
+              w = max;
+            } else {
+              w = Math.round((w * max) / h);
+              h = max;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', quality || 0.8);
+          callback(compressedDataUrl, file.name);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // --- 1. SHOP INFO ---
+    document.getElementById('shopName').value = shop.name;
+    document.getElementById('shopTagline').value = shop.tagline;
+    document.getElementById('shopEmail').value = shop.email;
+    document.getElementById('shopPhone').value = shop.phone;
+    document.getElementById('shopAddress').value = shop.address;
+    document.getElementById('shopHours').value = shop.hours;
+    document.getElementById('shopAbout').value = shop.about;
+
+    document.getElementById('infoForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const s = {
+        name: document.getElementById('shopName').value.trim(),
+        tagline: document.getElementById('shopTagline').value.trim(),
+        email: document.getElementById('shopEmail').value.trim(),
+        phone: document.getElementById('shopPhone').value.trim(),
+        address: document.getElementById('shopAddress').value.trim(),
+        hours: document.getElementById('shopHours').value.trim(),
+        about: document.getElementById('shopAbout').value.trim()
+      };
+      save(LS.shop, s);
+      const msg = document.getElementById('infoSaved');
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    });
+
+    // --- 2. MENU MANAGEMENT ---
+    let editingIndex = null;
+    const miFileInput = document.getElementById('miFileInput');
+    const miPhoto = document.getElementById('miPhoto');
+    const miPreviewBox = document.getElementById('miPreviewBox');
+    const miPreviewImg = document.getElementById('miPreviewImg');
+    const miPreviewName = document.getElementById('miPreviewName');
+    const miClearPhotoBtn = document.getElementById('miClearPhotoBtn');
+
+    // Handle device file upload (mobile camera, gallery, desktop file dialog)
+    miFileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      processImageFile(file, 600, 0.8, (dataUrl, fileName) => {
+        miPhoto.value = dataUrl;
+        miPreviewImg.src = dataUrl;
+        miPreviewName.textContent = fileName || 'Photo uploaded from device';
+        miPreviewBox.style.display = 'flex';
+      });
+    });
+
+    // Handle manual URL typing or pasting
+    miPhoto.addEventListener('input', () => {
+      const url = miPhoto.value.trim();
+      if (url) {
+        miPreviewImg.src = url;
+        miPreviewName.textContent = 'Remote image preview';
+        miPreviewBox.style.display = 'flex';
+      } else {
+        miPreviewBox.style.display = 'none';
+      }
+    });
+
+    // Clear photo
+    miClearPhotoBtn.addEventListener('click', () => {
+      miPhoto.value = '';
+      miFileInput.value = '';
+      miPreviewImg.src = '';
+      miPreviewBox.style.display = 'none';
+    });
+
+    document.getElementById('menuForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const item = {
+        name: document.getElementById('miName').value.trim(),
+        price: parseFloat(document.getElementById('miPrice').value),
+        category: document.getElementById('miCategory').value,
+        icon: document.getElementById('miIcon').value.trim() || '&#9749;',
+        desc: document.getElementById('miDesc').value.trim(),
+        photo: miPhoto.value.trim()
+      };
+
+      if (editingIndex !== null) {
+        menu[editingIndex] = item;
+        editingIndex = null;
+        document.getElementById('menuFormTitle').textContent = 'Add New Menu Item';
+        document.getElementById('cancelEditMenuBtn').style.display = 'none';
+      } else {
+        menu.push(item);
+      }
+
+      if (window.CoffeeAPI) {
+        window.CoffeeAPI.saveMenuItem(item);
+      }
+      save(LS.menu, menu);
+      e.target.reset();
+      miClearPhotoBtn.click();
+      renderMenu();
+    });
+
+    document.getElementById('cancelEditMenuBtn').addEventListener('click', () => {
+      editingIndex = null;
+      document.getElementById('menuForm').reset();
+      miClearPhotoBtn.click();
+      document.getElementById('menuFormTitle').textContent = 'Add New Menu Item';
+      document.getElementById('cancelEditMenuBtn').style.display = 'none';
+    });
+
+    function renderMenu() {
+      const list = document.getElementById('menuList');
+      list.innerHTML = '';
+      if (!menu || menu.length === 0) {
+        list.innerHTML = '<p style="color:var(--text-dim); text-align:center; padding:20px;">No menu items cataloged yet.</p>';
+        return;
+      }
+      menu.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'row-item';
+        const thumb = item.photo
+          ? '<img src="' + item.photo + '" alt="' + item.name + '">'
+          : item.icon || '&#9749;';
+
+        div.innerHTML = `
+          <div class="item-thumb">${thumb}</div>
+          <div class="item-main">
+            <h4 style="color:var(--text-main); font-size:1rem;">${item.name}</h4>
+            <p style="color:var(--text-muted); font-size:0.85rem;">
+              <span style="color:var(--color-primary); font-weight:700;">$${Number(item.price).toFixed(2)}</span> &bull; 
+              <span style="text-transform:capitalize;">${item.category}</span> &bull; ${item.desc || 'No description'}
+            </p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary btn-sm" onclick="editMenu(${i})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteMenu(${i})">Delete</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function editMenu(i) {
+      editingIndex = i;
+      const item = menu[i];
+      document.getElementById('miName').value = item.name;
+      document.getElementById('miPrice').value = item.price;
+      document.getElementById('miCategory').value = item.category;
+      document.getElementById('miIcon').value = item.icon === '&#9749;' ? '' : item.icon;
+      document.getElementById('miDesc').value = item.desc || '';
+      miPhoto.value = item.photo || '';
+
+      if (item.photo) {
+        miPreviewImg.src = item.photo;
+        miPreviewName.textContent = 'Current Item Photo';
+        miPreviewBox.style.display = 'flex';
+      } else {
+        miPreviewBox.style.display = 'none';
+      }
+
+      document.getElementById('menuFormTitle').textContent = 'Editing Menu Item: ' + item.name;
+      document.getElementById('cancelEditMenuBtn').style.display = 'inline-flex';
+      document.querySelector('#tab-menu').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function deleteMenu(i) {
+      if (confirm('Delete this menu item?')) {
+        const itemToDelete = menu[i];
+        if (window.CoffeeAPI && itemToDelete) {
+          window.CoffeeAPI.deleteMenuItem(itemToDelete.name);
+        }
+        menu.splice(i, 1);
+        save(LS.menu, menu);
+        renderMenu();
+      }
+    }
+
+    // --- 3. PHOTOS TAB ---
+    const phFileInput = document.getElementById('phFileInput');
+    const phUrl = document.getElementById('phUrl');
+    const phPreviewBox = document.getElementById('phPreviewBox');
+    const phPreviewImg = document.getElementById('phPreviewImg');
+    const phPreviewName = document.getElementById('phPreviewName');
+    const phClearPhotoBtn = document.getElementById('phClearPhotoBtn');
+
+    phFileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      processImageFile(file, 800, 0.82, (dataUrl, fileName) => {
+        phUrl.value = dataUrl;
+        phPreviewImg.src = dataUrl;
+        phPreviewName.textContent = fileName || 'Photo uploaded from device';
+        phPreviewBox.style.display = 'flex';
+      });
+    });
+
+    phUrl.addEventListener('input', () => {
+      const url = phUrl.value.trim();
+      if (url) {
+        phPreviewImg.src = url;
+        phPreviewName.textContent = 'Remote image preview';
+        phPreviewBox.style.display = 'flex';
+      } else {
+        phPreviewBox.style.display = 'none';
+      }
+    });
+
+    phClearPhotoBtn.addEventListener('click', () => {
+      phUrl.value = '';
+      phFileInput.value = '';
+      phPreviewImg.src = '';
+      phPreviewBox.style.display = 'none';
+    });
+
+    document.getElementById('photoForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const caption = document.getElementById('phCaption').value.trim();
+      const url = phUrl.value.trim();
+
+      if (!url) {
+        alert('Please choose an image from your device or enter an image URL.');
+        return;
+      }
+
+      photos.push({ caption, url });
+      save(LS.photos, photos);
+      e.target.reset();
+      phClearPhotoBtn.click();
+      renderPhotos();
+    });
+
+    function renderPhotos() {
+      const g = document.getElementById('gallery');
+      g.innerHTML = '';
+      if (!photos || photos.length === 0) {
+        g.innerHTML = '<p style="color:var(--text-dim); text-align:center; padding:20px; grid-column: 1 / -1;">No photos in gallery yet.</p>';
+        return;
+      }
+      photos.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'photo-card';
+        div.innerHTML = `
+          <img src="${p.url}" alt="${p.caption}">
+          <span class="caption-bar">${p.caption}</span>
+          <button class="del-btn" onclick="deletePhoto(${i})" title="Delete photo">&times;</button>
+        `;
+        g.appendChild(div);
+      });
+    }
+
+    function deletePhoto(i) {
+      photos.splice(i, 1);
+      save(LS.photos, photos);
+      renderPhotos();
+    }
+
+    // --- 4. FILES TAB ---
+    const flFileInput = document.getElementById('flFileInput');
+    const flUrl = document.getElementById('flUrl');
+    const flName = document.getElementById('flName');
+    const flNotice = document.getElementById('flSelectedNotice');
+
+    flFileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (!flName.value) {
+        flName.value = file.name;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (evt) {
+        flUrl.value = evt.target.result;
+        flNotice.style.display = 'block';
+        flNotice.textContent = '✅ File "' + file.name + '" loaded from device and ready to save.';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('fileForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const name = flName.value.trim();
+      const url = flUrl.value.trim();
+
+      if (!url) {
+        alert('Please select a file from your device or enter a document URL.');
+        return;
+      }
+
+      files.push({ name, url });
+      save(LS.files, files);
+      e.target.reset();
+      flNotice.style.display = 'none';
+      renderFiles();
+    });
+
+    function renderFiles() {
+      const list = document.getElementById('fileList');
+      list.innerHTML = '';
+      if (!files || files.length === 0) {
+        list.innerHTML = '<p style="color:var(--text-dim); text-align:center; padding:20px;">No document attachments saved.</p>';
+        return;
+      }
+      files.forEach((f, i) => {
+        const div = document.createElement('div');
+        div.className = 'row-item';
+        div.innerHTML = `
+          <div class="item-main">
+            <h4 style="color:var(--text-main); font-size:1rem;">📄 ${f.name}</h4>
+            <p style="color:var(--text-dim); font-size:0.82rem; word-break:break-all;">${f.url.startsWith('data:') ? 'Uploaded local file (' + Math.round(f.url.length * 0.75 / 1024) + ' KB)' : f.url}</p>
+          </div>
+          <div class="actions">
+            <a class="btn btn-secondary btn-sm" href="${f.url}" target="_blank" download="${f.name}">Open / Download</a>
+            <button class="btn btn-danger btn-sm" onclick="deleteFile(${i})">Delete</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function deleteFile(i) {
+      files.splice(i, 1);
+      save(LS.files, files);
+      renderFiles();
+    }
+
+    // TABS CONTROLLER
+    document.querySelectorAll('.admin-tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-body').forEach(s => {
+          s.classList.toggle('show', s.id === btn.dataset.tab);
+        });
+      });
+    });
+
+    // Initial render
+    renderMenu();
+    renderPhotos();
+    renderFiles();
+  </script>
+
+  <!-- Site Live Preview Modal -->
+  <div class="preview-modal-backdrop" id="previewModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; flex-direction:column; padding:16px;">
+    <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-lg); width:100%; max-width:1100px; height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:var(--shadow-lg);">
+      <div style="padding:14px 20px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <h3 style="margin:0; font-size:1.05rem; color:var(--text-main);">👁️ Live Storefront Preview</h3>
+          <div style="display:inline-flex; gap:6px; background:var(--bg-card); padding:3px 6px; border-radius:var(--radius-full); border:1px solid var(--border-color);">
+            <button type="button" id="previewModeDesktop" class="btn btn-sm" style="padding:4px 12px; font-size:0.75rem; background:var(--color-primary); color:#000;">🖥️ Desktop</button>
+            <button type="button" id="previewModeTablet" class="btn btn-sm" style="padding:4px 12px; font-size:0.75rem; background:transparent; color:var(--text-muted);">📱 Tablet</button>
+            <button type="button" id="previewModeMobile" class="btn btn-sm" style="padding:4px 12px; font-size:0.75rem; background:transparent; color:var(--text-muted);">📱 Mobile</button>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <a href="Home.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.8rem;">Open Full Tab ↗</a>
+          <button type="button" id="btnClosePreview" class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:1rem;">✕</button>
+        </div>
+      </div>
+      <div style="flex:1; background:#080e1a; display:flex; justify-content:center; align-items:center; overflow:hidden; padding:10px;">
+        <iframe id="previewFrame" src="Home.html" style="width:100%; height:100%; border:none; border-radius:var(--radius-sm); transition:width 0.3s ease; background:#fff;"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Preview Modal Logic
+    const previewModal = document.getElementById('previewModal');
+    const previewFrame = document.getElementById('previewFrame');
+    const btnPreviewSite = document.getElementById('btnPreviewSite');
+    const btnClosePreview = document.getElementById('btnClosePreview');
+
+    if (btnPreviewSite) {
+      btnPreviewSite.addEventListener('click', () => {
+        previewModal.style.display = 'flex';
+        previewFrame.src = 'Home.html';
+      });
+    }
+
+    if (btnClosePreview) {
+      btnClosePreview.addEventListener('click', () => {
+        previewModal.style.display = 'none';
+      });
+    }
+
+    previewModal.addEventListener('click', e => {
+      if (e.target === previewModal) previewModal.style.display = 'none';
+    });
+
+    document.getElementById('previewModeDesktop').addEventListener('click', function() {
+      previewFrame.style.width = '100%';
+      setPreviewActive(this);
+    });
+    document.getElementById('previewModeTablet').addEventListener('click', function() {
+      previewFrame.style.width = '768px';
+      setPreviewActive(this);
+    });
+    document.getElementById('previewModeMobile').addEventListener('click', function() {
+      previewFrame.style.width = '390px';
+      setPreviewActive(this);
+    });
+
+    function setPreviewActive(activeBtn) {
+      ['previewModeDesktop', 'previewModeTablet', 'previewModeMobile'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn === activeBtn) {
+          btn.style.background = 'var(--color-primary)';
+          btn.style.color = '#000';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.color = 'var(--text-muted)';
+        }
+      });
+    }
+  </script>
+  <script src="js/admin-control.js"></script>
+</body>
+</html>

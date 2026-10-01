@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=Home.html">
+  <title>Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 20px;
+    }
+    .redirect-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: clamp(30px, 6vw, 50px);
+      max-width: 440px;
+      width: 100%;
+      box-shadow: var(--shadow-md);
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--color-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+  <script>location.href = 'Home.html';</script>
+</head>
+<body>
+  <div class="redirect-card">
+    <div class="spinner"></div>
+    <h2 style="font-size: 1.4rem; margin-bottom: 8px;">Entering <span style="color:var(--color-primary)">Ai Coffee Shop</span>...</h2>
+    <p style="color:var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">Redirecting you to the homepage.</p>
+    <a href="Home.html" class="btn btn-primary btn-sm">Click here if not redirected &rarr;</a>
+  </div>
+</body>
+</html>

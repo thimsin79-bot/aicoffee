@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link" data-i18n="nav_home">Home</a></li>
+        <li><a href="Menu.html" class="nav-link" data-i18n="nav_menu">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link" data-i18n="nav_cart">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link" data-i18n="nav_orders">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link" data-i18n="nav_feedback">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link" data-i18n="nav_profile">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link active" data-i18n="nav_admin">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link" data-i18n="nav_signin">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-dashboard-wrap">
+    <div class="admin-head">
+      <div>
+        <h1>Admin <span>Dashboard</span></h1>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-top:4px;">Manage store performance, add new menu products, and view recent customer orders.</p>
+      </div>
+      <div class="admin-head-actions">
+        <button type="button" class="btn-add-product" id="btnOpenAddItemModal" title="Add new product item to menu catalog">
+          <span class="plus-icon">✚</span> Add New Product
+        </button>
+        <a href="AdminControl.html" class="btn btn-primary btn-sm">⚙️ Control Center &rarr;</a>
+        <a href="Home.html" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm back-to-site-btn" id="btnBackToSite" title="Opens live site in a new tab to keep you on the Admin Panel">🌐 Back to Site ↗</a>
+        <button type="button" class="btn btn-secondary btn-sm" id="btnPreviewSite" title="Live store preview inside Admin Panel">👁️ Preview Site</button>
+      </div>
+    </div>
+
+    <!-- Stats Counters -->
+    <div class="admin-stats-grid">
+      <div class="stat-card">
+        <div class="label">Total Orders</div>
+        <div class="value" id="totalOrders">0</div>
+        <div class="sub">All-time transactions</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Gross Revenue</div>
+        <div class="value" id="revenue">$0.00</div>
+        <div class="sub">Including tax &amp; delivery</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Products Sold</div>
+        <div class="value" id="productsSold">0</div>
+        <div class="sub">Total units delivered</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Customer Feedback</div>
+        <div class="value" id="feedbackCount">0</div>
+        <div class="sub" id="complaintCount">0 complaints</div>
+      </div>
+    </div>
+
+    <!-- Tables & Feedback Panels -->
+    <div class="admin-panels-grid">
+      <!-- Recent Orders Table Panel -->
+      <div class="admin-panel">
+        <h2>Recent Orders</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Latest Feedback Panel -->
+      <div class="admin-panel">
+        <h2>Latest Customer Feedback</h2>
+        <div id="feedbackList"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add New Product Item Modal -->
+  <div class="modal-backdrop" id="addItemModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalTitle">
+          <span>☕</span> Add New Product Item
+        </h3>
+        <button type="button" class="modal-close" id="closeAddItemModal" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="addNewItemForm" class="modal-body">
+        <div class="form-row">
+          <div class="field">
+            <label for="newProdName">Product Name *</label>
+            <input type="text" id="newProdName" class="form-control" placeholder="e.g., Caramel Oat Cold Brew" required>
+          </div>
+          <div class="field">
+            <label for="newProdCat">Category *</label>
+            <select id="newProdCat" class="form-control" required>
+              <option value="hot">☕ Hot Coffee</option>
+              <option value="cold" selected>🧊 Cold &amp; Iced Drinks</option>
+              <option value="food">🥐 Food &amp; Pastries</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="newProdPrice">Base Price ($) *</label>
+            <input type="number" id="newProdPrice" class="form-control" placeholder="4.50" step="0.10" min="0.50" required>
+          </div>
+          <div class="field">
+            <label for="newProdIcon">Default Icon / Emoji</label>
+            <input type="text" id="newProdIcon" class="form-control" placeholder="☕, 🧊, 🥐, 🧋, 🍵" value="☕">
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:16px;">
+          <label for="newProdDesc">Product Description / Notes</label>
+          <textarea id="newProdDesc" class="form-control" rows="2" placeholder="Brief tasting notes, roast profile, or ingredients..."></textarea>
+        </div>
+
+        <!-- Device Photo Upload Section -->
+        <div class="field" style="margin-bottom:18px;">
+          <label>Product Photo (Device Upload or Web URL)</label>
+          <div class="device-upload-card">
+            <div class="upload-btn-row">
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                <span>📷</span> Choose from Device (Camera / Files)
+                <input type="file" id="newProdPhotoFile" accept="image/*" style="display:none;">
+              </label>
+              <span style="color:var(--text-dim); font-size:0.85rem;">or paste image URL:</span>
+            </div>
+            <input type="url" id="newProdPhotoUrl" class="form-control" placeholder="https://example.com/drink.jpg" style="margin-top:10px;">
+            
+            <div id="newProdPhotoPreview" class="photo-preview-wrap" style="display:none;">
+              <div class="photo-preview-left">
+                <img id="newProdPhotoImg" src="" alt="Photo Preview">
+                <span id="newProdPhotoName" style="font-size:0.85rem; color:var(--text-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px;"></span>
+              </div>
+              <button type="button" class="remove-photo-btn" id="removePhotoBtn">&times; Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelAddItemModal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveNewItem">➕ Save &amp; Publish Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Site Live Preview Modal -->
+  <div class="preview-modal-backdrop" id="previewModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; flex-direction:column; padding:16px;">
+    <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-lg); width:100%; max-width:1100px; height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:var(--shadow-lg);">
+      <div style="padding:14px 20px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <h3 style="margin:0; font-size:1.05rem; color:var(--text-main);">👁️ Live Storefront Preview</h3>
+          <div style="display:inline-flex; gap:6px; background:var(--bg-card); padding:3px 6px; border-radius:var(--radius-full); border:1px solid var(--border-color);">
+            <button type="button" id="previewModeDesktop" class="btn btn-sm" style="padding:4px 12px; font-size:0.75rem; background:var(--color-primary); color:#000;">🖥️ Desktop</button>
+            <button type="button" id="previewModeTablet" class="btn btn-sm" style="padding:4px 12px; font-size:0.75rem; background:transparent; color:var(--text-muted);">📱 Tablet</button>
+            <button type="button" id="previewModeMobile" class="btn btn-sm" style="padding:4px 12px; font-size:0.75rem; background:transparent; color:var(--text-muted);">📱 Mobile</button>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <a href="Home.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.8rem;">Open Full Tab ↗</a>
+          <button type="button" id="btnClosePreview" class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:1rem;">✕</button>
+        </div>
+      </div>
+      <div style="flex:1; background:#080e1a; display:flex; justify-content:center; align-items:center; overflow:hidden; padding:10px;">
+        <iframe id="previewFrame" src="Home.html" style="width:100%; height:100%; border:none; border-radius:var(--radius-sm); transition:width 0.3s ease; background:#fff;"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Alert -->
+  <div class="toast-alert" id="toast">
+    <span>✅</span> Product published successfully!
+  </div>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+           <li><span>facebook: Ai Coffee Shop</span></li>
+            <li><span>instagram: Ai Coffee Shop</span></li>
+             <li><span>WhatApp : Ai Coffee Shop</span></li>
+              <li><span>TikTok: Ai Coffee Shop</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+    
+      <p>&copy; ២០២៦ Ai Coffee Shop| Handcrafted with passion|. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

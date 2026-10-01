@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders — Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .orders-wrap {
+      max-width: 860px;
+      margin: 20px auto 80px;
+      padding: 0 20px;
+    }
+
+    .order-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: clamp(16px, 3vw, 24px);
+      margin-bottom: 18px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .order-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .order-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .order-number {
+      font-weight: 700;
+      color: var(--color-primary);
+      font-size: 1.05rem;
+    }
+
+    .order-date {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    .order-items-snippet {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .order-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      padding-top: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .order-total-price {
+      font-weight: 800;
+      color: var(--color-primary);
+      font-size: 1.15rem;
+    }
+
+    .empty-orders {
+      text-align: center;
+      padding: 70px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+    }
+
+    .empty-orders .icon {
+      font-size: 4rem;
+      margin-bottom: 14px;
+    }
+
+    .empty-orders h2 {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .empty-orders p {
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+
+    @media (max-width: 767px) {
+      .orders-wrap {
+        margin: 16px auto 60px;
+        padding: 0 14px;
+      }
+
+      .order-card {
+        padding: clamp(14px, 3vw, 20px);
+      }
+
+      .order-number {
+        font-size: 0.95rem;
+      }
+
+      .order-date {
+        font-size: 0.8rem;
+      }
+
+      .order-items-snippet {
+        font-size: 0.85rem;
+      }
+
+      .order-total-price {
+        font-size: 1.05rem;
+      }
+
+      .empty-orders {
+        padding: 50px 16px;
+      }
+
+      .empty-orders h2 {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .orders-wrap {
+        margin: 12px auto 50px;
+        padding: 0 12px;
+      }
+
+      .order-card {
+        padding: 14px 12px;
+        margin-bottom: 14px;
+      }
+
+      .order-head {
+        margin-bottom: 8px;
+      }
+
+      .order-foot {
+        padding-top: 10px;
+      }
+
+      .empty-orders {
+        padding: 40px 14px;
+      }
+
+      .empty-orders .icon {
+        font-size: 3rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/orders.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link">Home</a></li>
+        <li><a href="Menu.html" class="nav-link">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link active">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <h1 data-i18n="nav_orders">Your Order History</h1>
+    <p>Track all previous coffee and pastry deliveries. Tap any card to view detailed receipt.</p>
+  </div>
+
+  <main class="orders-wrap">
+    <div id="ordersWrap"></div>
+
+    <div class="empty-orders" id="emptyBox" style="display:none;">
+      <div class="icon">📜</div>
+      <h2>No Orders Placed Yet</h2>
+      <p>When you complete a checkout, your receipt history will be stored here.</p>
+      <a href="Menu.html" class="btn btn-primary btn-lg" data-i18n="btn_explore_menu">Browse Menu Catalog &rarr;</a>
+    </div>
+  </main>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ai Coffee Shop. Handcrafted with passion. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    const statuses = ['Completed', 'Processing', 'Delivered'];
+
+    function renderOrders() {
+      const wrap = document.getElementById('ordersWrap');
+      const emptyBox = document.getElementById('emptyBox');
+
+      if (!orders || orders.length === 0) {
+        wrap.style.display = 'none';
+        emptyBox.style.display = 'block';
+        return;
+      }
+
+      wrap.style.display = 'block';
+      emptyBox.style.display = 'none';
+      wrap.innerHTML = '';
+
+      orders.slice().reverse().forEach(order => {
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        const items = (order.items || []).map(item => `${item.name} &times; ${item.qty}`).join(', ');
+        const status = statuses[order.number.length % 3];
+
+        card.innerHTML = `
+          <div class="order-head">
+            <span class="order-number">Order #${order.number}</span>
+            <span class="order-date">${order.date || 'Recent'}</span>
+          </div>
+          <div class="order-items-snippet">${items || 'Handcrafted Coffee'}</div>
+          <div class="order-foot">
+            <span class="status-badge ${status.toLowerCase()}">${status}</span>
+            <span class="order-total-price">$${Number(order.total).toFixed(2)}</span>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          localStorage.setItem('lastOrder', JSON.stringify(order));
+          location.href = 'Order.html';
+        });
+
+        wrap.appendChild(card);
+      });
+    }
+
+    renderOrders();
+  </script>
+  <script src="js/orders.js"></script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Profile — Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .profile-wrap {
+      max-width: 860px;
+      margin: 20px auto 80px;
+      padding: 0 20px;
+    }
+
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: clamp(20px, 5vw, 40px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 600px) {
+      .profile-top {
+        flex-direction: column;
+        text-align: center;
+        gap: 18px;
+      }
+    }
+
+    .avatar-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #040914;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.35);
+    }
+
+    .profile-details-top {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .profile-details-top h2 {
+      font-size: 1.7rem;
+      margin-bottom: 4px;
+    }
+
+    .profile-details-top .email {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 600px) {
+      .stats-row {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .profile-wrap {
+        margin: 16px auto 60px;
+        padding: 0 14px;
+      }
+
+      .profile-card {
+        padding: clamp(16px, 4vw, 28px);
+      }
+
+      .profile-details-top h2 {
+        font-size: 1.4rem;
+      }
+
+      .avatar-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 2.2rem;
+      }
+
+      .stat-box {
+        min-width: 90px;
+        padding: 10px 14px;
+      }
+
+      .stat-box .num {
+        font-size: 1.2rem;
+      }
+
+      .edit-section h3 {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .profile-wrap {
+        margin: 12px auto 50px;
+        padding: 0 12px;
+      }
+
+      .profile-card {
+        padding: 16px 14px;
+      }
+
+      .profile-top {
+        margin-bottom: 22px;
+        padding-bottom: 22px;
+      }
+
+      .profile-details-top h2 {
+        font-size: 1.25rem;
+      }
+
+      .btn-row {
+        flex-direction: column;
+      }
+
+      .btn-row .btn {
+        width: 100%;
+      }
+    }
+
+    .stat-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 12px 18px;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .stat-box .num {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--color-primary);
+    }
+
+    .stat-box .label {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .edit-section h3 {
+      font-size: 1.25rem;
+      color: var(--color-primary);
+      margin-bottom: 18px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .saved-alert {
+      background: var(--status-success-bg);
+      color: var(--status-success-text);
+      border: 1px solid var(--status-success-border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-top: 14px;
+      font-size: 0.9rem;
+      display: none;
+    }
+  </style>
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link">Home</a></li>
+        <li><a href="Menu.html" class="nav-link">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link active">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <h1>Member <span>Profile</span></h1>
+    <p>Manage your account settings, delivery preferences, and view order totals.</p>
+  </div>
+
+  <main class="profile-wrap">
+    <div class="profile-card">
+      <div class="profile-top">
+        <div class="avatar-circle" id="avatar">U</div>
+        <div class="profile-details-top">
+          <h2 id="displayName">Guest Coffee Lover</h2>
+          <div class="email" id="displayEmail">Not signed in</div>
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="num" id="totalOrders">0</div>
+              <div class="label">Orders</div>
+            </div>
+            <div class="stat-box">
+              <div class="num" id="totalSpent">$0</div>
+              <div class="label">Total Spent</div>
+            </div>
+            <div class="stat-box">
+              <div class="num" id="memberSince">2026</div>
+              <div class="label">Member Since</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="edit-section">
+        <h3>Edit Personal Information</h3>
+        <form id="editForm">
+          <div class="form-row">
+            <div class="field">
+              <label>Full Name</label>
+              <input type="text" id="editName" class="form-control" required>
+            </div>
+            <div class="field">
+              <label>Email Address</label>
+              <input type="email" id="editEmail" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Phone Number</label>
+              <input type="tel" id="editPhone" class="form-control" placeholder="+1 (555) 012-3456">
+            </div>
+            <div class="field">
+              <label>New Password (Optional)</label>
+              <input type="password" id="editPassword" class="form-control" placeholder="Leave blank to keep current">
+            </div>
+          </div>
+          <div class="btn-row">
+            <button type="submit" class="btn btn-primary" data-i18n="btn_save">Save Changes</button>
+            <button type="button" class="btn btn-danger" id="signOutBtn" data-i18n="nav_logout">Sign Out</button>
+          </div>
+          <p class="saved-alert" id="savedMsg">Profile updated successfully.</p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ai Coffee Shop. Handcrafted with passion. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+
+    function loadProfile() {
+      const initial = (user && user.name) ? user.name.charAt(0).toUpperCase() : 'U';
+      document.getElementById('avatar').textContent = initial;
+      document.getElementById('displayName').textContent = (user && user.name) || 'Guest';
+      document.getElementById('displayEmail').textContent = (user && user.email) || 'Not signed in';
+
+      document.getElementById('editName').value = (user && user.name) || '';
+      document.getElementById('editEmail').value = (user && user.email) || '';
+      document.getElementById('editPhone').value = (user && user.phone) || '';
+
+      document.getElementById('totalOrders').textContent = orders.length;
+      const spent = orders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+      document.getElementById('totalSpent').textContent = '$' + spent.toFixed(0);
+    }
+
+    loadProfile();
+
+    document.getElementById('editForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+      currentUser.name = document.getElementById('editName').value.trim();
+      currentUser.email = document.getElementById('editEmail').value.trim();
+      currentUser.phone = document.getElementById('editPhone').value.trim();
+      const newPass = document.getElementById('editPassword').value;
+      if (newPass) currentUser.password = newPass;
+
+      localStorage.setItem('user', JSON.stringify(currentUser));
+      loadProfile();
+
+      const msg = document.getElementById('savedMsg');
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    });
+
+    document.getElementById('signOutBtn').addEventListener('click', () => {
+      localStorage.removeItem('loggedIn');
+      alert('Signed out successfully.');
+      window.location.href = 'Home.html';
+    });
+  </script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed — Ai Coffee Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .confirm-wrap {
+      max-width: 680px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #040914;
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.35);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .order-number-badge {
+      display: inline-block;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--color-primary);
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 8px 20px;
+      border-radius: var(--radius-full);
+      margin: 16px 0 25px;
+      font-size: 1.05rem;
+    }
+
+    .receipt-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: clamp(20px, 4vw, 30px);
+      text-align: left;
+      margin: 20px 0 30px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .receipt-card h2 {
+      font-size: 1.2rem;
+      color: var(--color-primary);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .receipt-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .receipt-breakdown {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .receipt-line {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+    }
+
+    .receipt-line.total {
+      border-top: 1px solid var(--border-color);
+      padding-top: 12px;
+      margin-top: 12px;
+      color: var(--text-main);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .receipt-meta {
+      background: var(--bg-surface);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-top: 18px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .receipt-meta span {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    @media (max-width: 767px) {
+      .confirm-wrap {
+        margin: 30px auto 60px;
+        padding: 0 14px;
+      }
+
+      .success-icon {
+        width: 72px;
+        height: 72px;
+        font-size: 2.5rem;
+      }
+
+      .receipt-card {
+        padding: clamp(16px, 4vw, 24px);
+      }
+
+      .receipt-card h2 {
+        font-size: 1.1rem;
+      }
+
+      .receipt-item-row {
+        font-size: 0.85rem;
+      }
+
+      .receipt-line {
+        font-size: 0.85rem;
+      }
+
+      .receipt-line.total {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .confirm-wrap {
+        margin: 20px auto 50px;
+        padding: 0 12px;
+      }
+
+      .success-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 2.2rem;
+      }
+
+      .order-number-badge {
+        font-size: 0.92rem;
+        padding: 7px 16px;
+      }
+
+      .receipt-card {
+        padding: 16px 14px;
+      }
+
+      .action-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .action-row .btn {
+        width: 100%;
+        max-width: 260px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/orders.css">
+</head>
+<body>
+
+  <!-- Responsive Navigation Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="Home.html" class="logo">☕ Ai <span>Coffee Shop</span></a>
+      
+      <ul class="nav-menu">
+        <li><a href="Home.html" class="nav-link">Home</a></li>
+        <li><a href="Menu.html" class="nav-link">Menu</a></li>
+        <li><a href="Cart.html" class="nav-link">Cart <span class="nav-badge cart-badge-count" style="display:none;">0</span></a></li>
+        <li><a href="Orders.html" class="nav-link">My Orders</a></li>
+        <li><a href="Feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="Profile.html" class="nav-link">Profile</a></li>
+        <li><a href="Admin.html" class="nav-link">Admin</a></li>
+        <li><a href="SignIn.html" class="nav-link">Sign In</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="Cart.html" class="header-cart-btn" aria-label="Shopping Cart">
+          🛒
+          <span class="badge-counter cart-badge-count" style="display:none;">0</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="confirm-wrap">
+    <div id="orderContent">
+      <div class="success-icon">&#10003;</div>
+      <h1 style="font-size: clamp(2rem, 5vw, 2.6rem); margin-bottom: 6px;" data-i18n="order_confirmed_title">Order Confirmed!</h1>
+      <p style="color:var(--text-muted);" data-i18n="order_confirmed_sub">Thank you for ordering at Ai Coffee Shop. Your freshly brewed treats are being prepared!</p>
+      
+      <div class="order-number-badge">
+        Order #<span id="orderNumber">000000</span>
+      </div>
+
+      <div class="receipt-card">
+        <h2 data-i18n="cart_summary">Order Receipt</h2>
+        <div id="orderItems"></div>
+
+        <div class="receipt-breakdown">
+          <div class="receipt-line"><span data-i18n="cart_subtotal">Subtotal</span><span id="subtotal">$0.00</span></div>
+          <div class="receipt-line"><span data-i18n="cart_tax">Tax (8%)</span><span id="tax">$0.00</span></div>
+          <div class="receipt-line"><span data-i18n="cart_shipping">Delivery Fee</span><span id="deliveryFee">$0.00</span></div>
+          <div class="receipt-line total"><span data-i18n="cart_total">Total Paid</span><span id="total" style="color:var(--color-primary)">$0.00</span></div>
+        </div>
+
+        <div class="receipt-meta">
+          <div>Payment Method: <span id="payMethod">Cash on Delivery</span></div>
+          <div>Destination: <span id="deliveryTo">Customer Address</span></div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <a href="Menu.html" class="btn btn-primary btn-lg" data-i18n="btn_order_online">Order More &rarr;</a>
+        <a href="Orders.html" class="btn btn-secondary btn-lg">View All Orders</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Responsive Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="Home.html" class="logo" style="margin-bottom: 14px;">☕ Ai <span>Coffee Shop</span></a>
+        <p>Freshly roasted specialty coffee, artisanal handcrafted drinks, and oven-fresh pastries delivered straight to your door.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Menu.html">Menu Catalog</a></li>
+          <li><a href="Orders.html">My Orders</a></li>
+          <li><a href="Feedback.html">Customer Feedback</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul class="footer-links">
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Create Account</a></li>
+          <li><a href="Profile.html">My Profile</a></li>
+          <li><a href="Admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visit Us</h4>
+        <ul class="footer-links">
+          <li><span>📍 123 Coffee Street</span></li>
+          <li><span>📞 +1 555-0123</span></li>
+          <li><span>⏰ Mon–Sun: 7:00 AM – 9:00 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ai Coffee Shop. Handcrafted with passion. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const order = JSON.parse(localStorage.getItem('lastOrder') || 'null');
+
+    if (!order) {
+      document.getElementById('orderContent').innerHTML = `
+        <div class="receipt-card" style="text-align:center; padding: 50px 20px;">
+          <div style="font-size:3.5rem; margin-bottom:12px;">🔍</div>
+          <h2>No Order Found</h2>
+          <p style="color:var(--text-muted); margin-bottom:20px;">You haven't placed an order in this session yet.</p>
+          <a href="Menu.html" class="btn btn-primary">Browse Our Menu &rarr;</a>
+        </div>
+      `;
+    } else {
+      document.getElementById('orderNumber').textContent = order.number;
+      document.getElementById('payMethod').textContent = order.payment;
+      document.getElementById('deliveryTo').textContent = (order.name || 'Customer') + ' — ' + (order.address || '');
+
+      const items = document.getElementById('orderItems');
+      items.innerHTML = '';
+      (order.items || []).forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'receipt-item-row';
+        div.innerHTML = `
+          <span>${item.icon || '☕'} ${item.name} &times; ${item.qty}</span>
+          <span style="font-weight:600; color:var(--text-main);">$${Number(item.lineTotal).toFixed(2)}</span>
+        `;
+        items.appendChild(div);
+      });
+
+      document.getElementById('subtotal').textContent = '$' + Number(order.subtotal).toFixed(2);
+      document.getElementById('tax').textContent = '$' + Number(order.tax).toFixed(2);
+      document.getElementById('deliveryFee').textContent = '$' + Number(order.delivery).toFixed(2);
+      document.getElementById('total').textContent = '$' + Number(order.total).toFixed(2);
+    }
+  </script>
+  <script src="js/order.js"></script>
+</body>
+</html>
